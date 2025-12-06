@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="New Year's Gift Exchange - Celebrate the New Year with friends and family">
+    <title>New Year's Gift Exchange 2025</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Snowflakes Animation -->
+    <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+    </div>
+
+    <!-- Hero Section with Countdown -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="ornament ornament-left">🎄</div>
+            <div class="ornament ornament-right">🎁</div>
+            
+            <h1 class="main-title">
+                <span class="title-line">New Year's</span>
+                <span class="title-line highlight">Gift Exchange</span>
+            </h1>
+            
+            <p class="subtitle">Celebrate 2025 with Joy & Giving</p>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <h2 class="countdown-title">Countdown to New Year</h2>
+                <div class="countdown-timer">
+                    <div class="time-unit">
+                        <span class="time-value" id="days">00</span>
+                        <span class="time-label">Days</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-value" id="hours">00</span>
+                        <span class="time-label">Hours</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-value" id="minutes">00</span>
+                        <span class="time-label">Minutes</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-value" id="seconds">00</span>
+                        <span class="time-label">Seconds</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="cta-button">
+                <span class="button-text">Start Your Exchange</span>
+                <span class="button-icon">🎉</span>
+            </button>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="floating-ornament ornament-1">✨</div>
+        <div class="floating-ornament ornament-2">🌟</div>
+        <div class="floating-ornament ornament-3">⭐</div>
+        <div class="floating-ornament ornament-4">✨</div>
+    </section>
+
+    <!-- Placeholder for Future Sections -->
+    <section class="future-section">
+        <div class="container">
+            <div class="coming-soon">
+                <h2>More Exciting Features Coming Soon!</h2>
+                <p>Stay tuned for additional sections</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- University Branding -->
+            <div class="university-section">
+                <img src="https://cerrahpasa.istanbul.edu.tr/wp-content/uploads/2021/09/cropped-logo-iuc.png" alt="İstanbul Üniversitesi Cerrahpaşa Logo" class="university-logo">
+                <p class="university-name">İstanbul Üniversitesi - Cerrahpaşa</p>
+                <p class="university-department">Bilgisayar Mühendisliği Bölümü</p>
+            </div>
+            
+            <div class="footer-decoration">
+                <span class="deco-star">⭐</span>
+                <span class="deco-line"></span>
+                <span class="deco-star">⭐</span>
+            </div>
+            
+            <h3 class="footer-title">Crafted with Love by</h3>
+            
+            <div class="developers">
+                <a href="https://www.linkedin.com/in/merenakgul/" target="_blank" rel="noopener noreferrer" class="developer-name">Mehmet Eren Akgül</a>
+                <a href="https://www.linkedin.com/in/ali-r%C4%B1za-g%C3%B6%C3%A7er-06347929b/" target="_blank" rel="noopener noreferrer" class="developer-name">Ali Rıza Göçer</a>
+                <a href="https://www.linkedin.com/in/altan-tari-a15511201/" target="_blank" rel="noopener noreferrer" class="developer-name">Altan Tarı</a>
+                <a href="https://www.linkedin.com/in/%C3%B6mer-faruk-co%C5%9Fkun-191420234/" target="_blank" rel="noopener noreferrer" class="developer-name">Ömer Faruk Coşkun</a>
+                <div class="developer-name">Hakan Tan</div>
+            </div>
+            
+            <div class="footer-decoration">
+                <span class="deco-line"></span>
+                <span class="deco-heart">❤️</span>
+                <span class="deco-line"></span>
+            </div>
+            
+            <p class="copyright">© 2025 New Year's Gift Exchange. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/countdown.js' %}"></script>
+</body>
+</html>
