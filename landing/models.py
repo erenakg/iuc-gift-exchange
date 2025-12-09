@@ -16,3 +16,12 @@ def create_or_update_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     else:
         instance.profile.save()
+        
+class UserPreference(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    selected_hobbies = models.TextField(blank=True, null = True)
+    additional_notes = models.TextField(blank=True, null = True)
+   
+def __str__(self):
+    return f"{self.user.username} Tercihleri"
+

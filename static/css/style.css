@@ -613,7 +613,6 @@ img {
     color: var(--cream);
     font-size: 1rem;
     line-height: 1.5;
-}
     color: var(--cream);
     line-height: 1.6;
 }
@@ -691,9 +690,9 @@ img {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     font-family: 'Poppins', sans-serif;
     line-height: 1.7;
-}
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
 
 /* ===================================
    COUNTDOWN TIMER

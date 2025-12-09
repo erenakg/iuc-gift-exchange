@@ -353,7 +353,7 @@
         </div>
 
         <!-- Preferences Form -->
-        <form method="POST" action="#">
+        <form method="POST" action="{% url 'preferences' %}">
             {% csrf_token %}
             
             <div class="content-card">

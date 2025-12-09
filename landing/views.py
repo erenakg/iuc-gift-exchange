@@ -3,10 +3,15 @@ from .forms import StudentRegistrationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import UserPreference # Modeli import etmeyi unutma
 
 def home_view(request):
+    kullanici_sayisi = User.objects.count()
     # 'landing/index.html' senin anasayfa tasarımının olduğu HTML olmalı
-    return render(request, 'landing/home.html')
+    return render(request, 'landing/home.html',{ 
+        'total_users': kullanici_sayisi
+    })
 
 def register_view(request):
     if request.method == 'POST':
@@ -46,9 +51,7 @@ def login_view(request):
                 user = authenticate(username=user_obj.username, password=password)
 
                 if user is not None:
-                    login(request, user)
-                    print("✅ Giriş Başarılı!")
-                    return redirect('home') # Anasayfaya yönlendir
+                    return redirect('preferences') # Anasayfaya yönlendir
                 else:
                     messages.error(request, "Şifre hatalı!")
             else:
@@ -59,3 +62,23 @@ def login_view(request):
             messages.error(request, "Bir sorun oluştu.")
 
     return render(request, 'landing/auth.html') # Veya login sayfan hangisiyse
+@login_required(login_url='login')
+def preferences_view(request):
+    if request.method == 'POST':
+        # 1. HTML'deki o gizli inputtan (hidden input) veriyi alıyoruz
+        hobbies_string = request.POST.get('preferences') 
+        notes = request.POST.get('additional_notes')
+
+        # 2. request.user sayesinde HANGİ kullanıcının kaydettiğini biliyoruz
+        # update_or_create: Varsa günceller, yoksa yeni oluşturur.
+        preference, created = UserPreference.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'selected_hobbies': hobbies_string,
+                'additional_notes': notes
+            }
+        )
+        
+        print(f"✅ {request.user.username} için  tercihler kaydedildi: {hobbies_string}")
+        return redirect('home') # Tercihler kaydedildikten sonra anasayfaya
+    return render(request, 'landing/preferences.html')

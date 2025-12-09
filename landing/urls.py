@@ -11,4 +11,6 @@ urlpatterns = [
 
     # 3. GİRİŞ EKRANI (Varsa)
     path('giris-yap/', views.login_view, name='login'),
+
+    path('tercihler/', views.preferences_view, name='preferences'),
 ]
