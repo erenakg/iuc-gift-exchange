@@ -1,0 +1,136 @@
+/* ===================================
+   TEMA 1: ŞEFFAF MİNİMALİST
+   =================================== */
+
+/* FOOTER */
+.footer {
+    background: transparent;
+    padding: 3rem 2rem 2rem;
+    position: relative;
+    z-index: 100;
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* UNIVERSITY SECTION */
+.university-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.university-logo {
+    display: none;
+}
+
+.university-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+    letter-spacing: 1px;
+}
+
+.university-department {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 400;
+    color: var(--cream);
+    opacity: 0.85;
+}
+
+/* FOOTER DECORATION */
+.footer-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.deco-star {
+    font-size: 1.2rem;
+    color: var(--gold);
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.deco-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 2px;
+}
+
+.deco-heart {
+    font-size: 1.2rem;
+    color: var(--cream);
+    animation: snowfall 2s ease-in-out infinite;
+}
+
+@keyframes snowfall {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* DEVELOPERS */
+.developers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+    margin: 1rem 0;
+}
+
+.developer-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 500;
+    color: var(--cream);
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.developer-name:hover {
+    background: rgba(255, 215, 0, 0.25);
+    color: var(--gold);
+    transform: translateY(-2px);
+    border-color: var(--gold);
+}
+
+a.developer-name {
+    color: var(--cream);
+}
+
+/* COPYRIGHT */
+.copyright {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+    color: var(--cream);
+    margin-top: 1.5rem;
+    opacity: 0.6;
+    font-weight: 300;
+}

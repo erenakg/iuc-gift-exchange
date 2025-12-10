@@ -1,0 +1,187 @@
+/* ===================================
+   TEMA 3: KAR KRİSTALİ
+   =================================== */
+
+/* FOOTER */
+.footer {
+    background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(100, 150, 200, 0.15) 50%,
+        rgba(50, 100, 150, 0.25) 100%);
+    padding: 3rem 2rem 2rem;
+    position: relative;
+    z-index: 100;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* UNIVERSITY SECTION */
+.university-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.university-logo {
+    display: none;
+}
+
+.university-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    color: #e0f0ff;
+    margin-bottom: 0.3rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(150, 200, 255, 0.6);
+}
+
+.university-department {
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* FOOTER DECORATION */
+.footer-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.deco-star {
+    font-size: 1.2rem;
+    color: #a0d8ff;
+    animation: crystal-sparkle 3s ease-in-out infinite;
+}
+
+.deco-star:nth-child(1) { animation-delay: 0s; }
+.deco-star:nth-child(3) { animation-delay: 1s; }
+
+@keyframes crystal-sparkle {
+    0%, 100% { 
+        opacity: 0.6; 
+        transform: scale(1) rotate(0deg);
+        text-shadow: 0 0 5px #a0d8ff;
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.2) rotate(180deg);
+        text-shadow: 0 0 20px #a0d8ff, 0 0 30px #fff;
+    }
+}
+
+.deco-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(160, 216, 255, 0.8), 
+        transparent);
+    border-radius: 2px;
+}
+
+.deco-heart {
+    font-size: 1.3rem;
+    color: #a0d8ff;
+    animation: snow-float 2.5s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.8);
+}
+
+@keyframes snow-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(15deg); }
+}
+
+.footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: #e0f0ff;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
+}
+
+/* DEVELOPERS */
+.developers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1rem;
+    margin: 1rem 0;
+}
+
+.developer-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(160, 216, 255, 0.3);
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.developer-name::before {
+    content: '❄';
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.developer-name::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 40%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 60%);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+}
+
+.developer-name:hover {
+    background: rgba(160, 216, 255, 0.2);
+    border-color: rgba(160, 216, 255, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 5px 20px rgba(160, 216, 255, 0.3),
+        0 0 30px rgba(160, 216, 255, 0.2);
+}
+
+.developer-name:hover::after {
+    left: 100%;
+}
+
+a.developer-name {
+    color: #fff;
+}
+
+/* COPYRIGHT */
+.copyright {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+    color: rgba(224, 240, 255, 0.6);
+    margin-top: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
