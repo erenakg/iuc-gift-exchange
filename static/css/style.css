@@ -39,9 +39,9 @@ html {
 }
 
 body {
-    font-family: 'Amore Christmas', cursive;
+    font-family: 'Lora', serif;
     background: var(--gradient-festive);
-    color: var(--white);
+    color: #e0f0ff;
     overflow-x: hidden;
     line-height: 1.6;
     position: relative;
@@ -256,16 +256,16 @@ img {
 
 /* Main Tagline (Outside Box) */
 .hero-main-tagline {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Lora', serif;
     font-size: clamp(1.8rem, 5vw, 3.5rem);
     font-weight: 900;
-    color: #FFD700;
+    color: #e0f0ff;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-align: center;
     text-shadow: 
         3px 3px 8px rgba(0, 0, 0, 0.9),
-        0 0 50px rgba(255, 215, 0, 0.9),
+        0 0 50px rgba(160, 216, 255, 0.9),
         0 0 25px rgba(255, 255, 255, 0.6);
     z-index: 10;
     position: relative;
@@ -348,21 +348,21 @@ img {
 /* Decorative Divider */
 .divider-stars {
     font-size: 1.2rem;
-    color: #FFD700;
+    color: #e0f0ff;
     margin: 1.5rem 0 0.5rem 0;
     letter-spacing: 8px;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    filter: drop-shadow(0 0 8px rgba(160, 216, 255, 0.6));
     animation: starTwinkle 2s ease-in-out infinite;
 }
 
 @keyframes starTwinkle {
     0%, 100% { 
         opacity: 1;
-        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        filter: drop-shadow(0 0 8px rgba(160, 216, 255, 0.6));
     }
     50% { 
         opacity: 0.7;
-        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9));
+        filter: drop-shadow(0 0 15px rgba(160, 216, 255, 0.9));
     }
 }
 
@@ -371,7 +371,7 @@ img {
    =================================== */
 .stats-section {
     position: relative;
-    padding: 3rem 2rem;
+    padding: 1rem 2rem;
     background: transparent;
     display: flex;
     justify-content: center;
@@ -389,26 +389,23 @@ img {
     margin: 0 auto;
     padding: 1.5rem 2rem;
     background: rgba(0, 0, 0, 0.3);
-    border: 3px solid var(--gold);
+    border: 3px solid #e0f0ff;
     border-radius: 20px;
     backdrop-filter: blur(15px);
     box-shadow: 
         0 10px 40px rgba(0, 0, 0, 0.6),
-        0 0 30px rgba(255, 215, 0, 0.4),
+        0 0 30px rgba(160, 216, 255, 0.4),
         inset 0 2px 0 rgba(255, 255, 255, 0.1);
     text-align: center;
     animation: fadeInUp 1.2s ease-out;
 }
 
 .counter-number {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Lora', serif;
     font-size: 2.8rem;
     font-weight: 900;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+    color: #e0f0ff;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
     line-height: 1;
     margin-bottom: 0.3rem;
     animation: counterPulse 2s ease-in-out infinite;
@@ -416,11 +413,11 @@ img {
 
 .counter-label {
     font-size: 0.85rem;
-    color: var(--gold-light);
+    color: #e0f0ff;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lora', serif;
 }
 
 @keyframes counterPulse {
@@ -455,15 +452,12 @@ img {
 }
 
 .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Lora', serif;
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 900;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #e0f0ff;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
     margin-bottom: 3rem;
-    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
 .steps-container {
@@ -478,7 +472,7 @@ img {
 
 .step-card {
     background: rgba(0, 0, 0, 0.65);
-    border: 3px solid var(--red-primary);
+    border: 3px solid #e0f0ff;
     border-radius: 20px;
     padding: 1.5rem;
     backdrop-filter: blur(15px) saturate(120%);
@@ -488,8 +482,8 @@ img {
 
 .step-card:hover {
     transform: translateY(-10px);
-    border-color: var(--gold);
-    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+    border-color: #fff;
+    box-shadow: 0 15px 40px rgba(160, 216, 255, 0.4);
 }
 
 /* Step Card 3 & 4 - Left Aligned Content, Center Title */
@@ -510,34 +504,29 @@ img {
 }
 
 .step-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-family: 'Lora', serif;
+    font-size: 3.75rem;
     font-weight: 900;
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #e0f0ff;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
     margin-bottom: 1rem;
 }
 
 .step-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.9rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-family: 'Modak', cursive;
+    font-size: 2.875rem;
+    font-weight: 400;
+    color: #e0f0ff;
     margin-bottom: 1rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+    text-shadow: none;
 }
 
 .step-description {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.95rem;
+    font-family: 'Lora', serif;
+    font-size: 1.19rem;
     font-weight: 400;
-    color: rgba(255, 248, 220, 0.95);
+    color: #e0f0ff;
     line-height: 1.8;
     margin-bottom: 1.5rem;
     text-align: left;
@@ -548,7 +537,7 @@ img {
     width: 100%;
     max-width: 500px;
     height: auto;
-    border: 3px solid var(--gold);
+    border: 3px solid #e0f0ff;
     border-radius: 12px;
     margin-top: 1rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
@@ -561,7 +550,7 @@ img {
     .step-image {
         max-width: 100%;
         height: auto;
-        border: 2px solid var(--gold);
+        border: 2px solid #e0f0ff;
     }
 }
 
@@ -569,7 +558,7 @@ img {
     .step-image {
         max-width: 100%;
         height: auto;
-        border: 2px solid var(--gold);
+        border: 2px solid #e0f0ff;
         margin-top: 0.75rem;
     }
 }
@@ -581,6 +570,33 @@ img {
     gap: 1rem;
 }
 
+/* Step Hint */
+.step-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, rgba(255, 200, 100, 0.15) 0%, rgba(255, 180, 60, 0.1) 100%);
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 200, 100, 0.4);
+    margin: 1rem 0 1.5rem 0;
+}
+
+.hint-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(255, 200, 100, 0.6));
+}
+
+.hint-text {
+    font-family: 'Lora', serif;
+    color: #ffe5a0;
+    font-size: 1.19rem;
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: 500;
+}
+
 .feature-item {
     display: flex;
     align-items: flex-start;
@@ -588,7 +604,7 @@ img {
     background: rgba(255, 255, 255, 0.1);
     padding: 1rem;
     border-radius: 8px;
-    border-left: 4px solid var(--gold);
+    border-left: 4px solid #e0f0ff;
 }
 
 .feature-icon {
@@ -603,18 +619,17 @@ img {
 }
 
 .feature-label {
-    font-family: 'Amore Christmas', cursive;
-    color: var(--gold);
+    font-family: 'Lora', serif;
+    color: #e0f0ff;
     font-size: 1rem;
     font-weight: 700;
 }
 
 .feature-text {
-    color: var(--cream);
+    color: #e0f0ff;
     font-size: 1rem;
     line-height: 1.5;
-    color: var(--cream);
-    line-height: 1.6;
+    font-family: 'Lora', serif;
 }
 
 .hero-overlay {
@@ -647,30 +662,30 @@ img {
    TYPOGRAPHY
    =================================== */
 .main-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lora', serif;
     font-size: clamp(1.3rem, 3vw, 2rem);
     font-weight: 600;
     line-height: 1.6;
     margin-bottom: 0rem;
     text-shadow: 
         2px 2px 10px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 215, 0, 0.3);
+        0 0 20px rgba(160, 216, 255, 0.3);
 }
 
 .title-line {
     display: block;
-    color: #FFFFFF;
+    color: #e0f0ff;
     font-weight: 400;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .title-line.highlight {
-    color: #FFD700;
+    color: #e0f0ff;
     font-weight: 800;
     font-size: 1.15em;
     text-shadow: 
         3px 3px 6px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(255, 215, 0, 0.7);
+        0 0 30px rgba(160, 216, 255, 0.7);
     letter-spacing: 0.5px;
     margin: 0.3rem 0;
 }
@@ -684,13 +699,12 @@ img {
     font-size: clamp(0.85rem, 1.8vw, 1.05rem);
     font-weight: 400;
     font-style: italic;
-    color: rgba(255, 248, 220, 0.95);
+    color: #e0f0ff;
     margin-bottom: 1.8rem;
     letter-spacing: 0.8px;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lora', serif;
     line-height: 1.7;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -699,15 +713,15 @@ img {
    =================================== */
 .countdown-container {
     background: rgba(0, 0, 0, 0.4);
-    border: 3px solid var(--gold);
+    border: 3px solid #e0f0ff;
     border-radius: 20px;
-    padding: 2.25rem 1.5rem;
-    margin: 3rem auto;
+    padding: 1.5rem 1.5rem;
+    margin: 1rem auto;
     max-width: 675px;
     backdrop-filter: blur(10px);
     box-shadow: 
         0 10px 40px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 215, 0, 0.3),
+        0 0 0 1px rgba(160, 216, 255, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: pulseGlow 2s ease-in-out infinite;
 }
@@ -716,26 +730,26 @@ img {
     0%, 100% {
         box-shadow: 
             0 10px 40px rgba(0, 0, 0, 0.5),
-            0 0 20px rgba(255, 215, 0, 0.3),
+            0 0 20px rgba(160, 216, 255, 0.3),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     50% {
         box-shadow: 
             0 10px 40px rgba(0, 0, 0, 0.5),
-            0 0 40px rgba(255, 215, 0, 0.6),
+            0 0 40px rgba(160, 216, 255, 0.6),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 }
 
 .countdown-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Lora', serif;
     font-size: clamp(1.3rem, 3.5vw, 2.2rem);
     font-weight: 900;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
+    color: #e0f0ff;
+    margin-bottom: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
 }
 
 .countdown-timer {
@@ -743,7 +757,7 @@ img {
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .time-unit {
@@ -756,32 +770,31 @@ img {
 .time-value {
     font-size: clamp(1.875rem, 4.5vw, 3.375rem);
     font-weight: 800;
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #e0f0ff;
     line-height: 1;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: 'Amore Christmas', cursive;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
+    font-family: 'Lora', serif;
 }
 
 .time-label {
     font-size: clamp(0.75rem, 2vw, 1rem);
     font-weight: 600;
-    color: var(--cream);
+    color: #e0f0ff;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-top: 0.5rem;
+    font-family: 'Lora', serif;
 }
 
 .time-separator {
     font-size: clamp(1.125rem, 3vw, 1.875rem);
     font-weight: 600;
-    color: var(--gold);
+    color: #e0f0ff;
     margin: 0 0.5625rem;
     opacity: 0.6;
     align-self: center;
     margin-bottom: 1.125rem;
+    font-family: 'Lora', serif;
 }
 
 @keyframes blink {
@@ -797,24 +810,25 @@ img {
     padding: 1.3rem 3rem;
     font-size: clamp(0.95rem, 2.2vw, 1.15rem);
     font-weight: 700;
-    color: var(--white);
-    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FF6B35 100%);
-    border: 3px solid #FFD700;
+    color: #e0f0ff;
+    background: linear-gradient(135deg, rgba(160, 216, 255, 0.3) 0%, rgba(100, 180, 255, 0.4) 50%, rgba(160, 216, 255, 0.3) 100%);
+    border: 3px solid #e0f0ff;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-transform: uppercase;
     letter-spacing: 2.5px;
     box-shadow: 
-        0 15px 40px rgba(255, 107, 53, 0.6),
-        0 0 30px rgba(255, 215, 0, 0.5),
+        0 15px 40px rgba(160, 216, 255, 0.3),
+        0 0 30px rgba(160, 216, 255, 0.3),
         inset 0 2px 0 rgba(255, 255, 255, 0.3);
     position: relative;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lora', serif;
+    backdrop-filter: blur(10px);
 }
 
 .cta-button::before {
@@ -835,11 +849,11 @@ img {
 .cta-button:hover {
     transform: translateY(-10px) scale(1.12);
     box-shadow: 
-        0 25px 60px rgba(255, 107, 53, 0.9),
-        0 0 60px rgba(255, 215, 0, 0.8),
+        0 25px 60px rgba(160, 216, 255, 0.5),
+        0 0 60px rgba(160, 216, 255, 0.5),
         inset 0 2px 0 rgba(255, 255, 255, 0.4);
-    border-color: #FFF4B5;
-    background: linear-gradient(135deg, #FF8C42 0%, #FFA500 50%, #FF8C42 100%);
+    border-color: #fff;
+    background: linear-gradient(135deg, rgba(180, 230, 255, 0.4) 0%, rgba(120, 200, 255, 0.5) 50%, rgba(180, 230, 255, 0.4) 100%);
 }
 
 .cta-button:active {
@@ -964,15 +978,19 @@ img {
    FOOTER
    =================================== */
 .footer {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 4rem 2rem 2rem;
+    background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(100, 150, 200, 0.15) 50%,
+        rgba(50, 100, 150, 0.25) 100%);
+    padding: 3rem 2rem 2rem;
     position: relative;
-    backdrop-filter: blur(10px);
-    border-top: 3px solid var(--gold);
+    z-index: 100;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 .footer-content {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
 }
@@ -981,37 +999,30 @@ img {
    UNIVERSITY SECTION
    =================================== */
 .university-section {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .university-logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 1rem;
-    filter: brightness(1.1) contrast(1.1);
-    transition: transform 0.3s ease;
-}
-
-.university-logo:hover {
-    transform: scale(1.05);
+    display: none;
 }
 
 .university-name {
-    font-family: 'Amore Christmas', cursive;
-    font-size: clamp(1rem, 2.5vw, 1.5rem);
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
+    font-family: 'Lora', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    color: #e0f0ff;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 15px rgba(150, 200, 255, 0.6);
 }
 
 .university-department {
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-family: 'Lora', serif;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
     font-weight: 400;
-    color: var(--cream);
-    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .footer-decoration {
@@ -1019,93 +1030,136 @@ img {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    margin: 2rem 0;
+    margin: 1.5rem 0;
 }
 
 .deco-star {
-    font-size: 1.5rem;
-    color: var(--gold);
-    animation: twinkle 2s ease-in-out infinite;
+    font-size: 1.2rem;
+    color: #a0d8ff;
+    animation: crystal-sparkle 3s ease-in-out infinite;
 }
 
-@keyframes twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+.deco-star:nth-child(1) { animation-delay: 0s; }
+.deco-star:nth-child(3) { animation-delay: 1s; }
+
+@keyframes crystal-sparkle {
+    0%, 100% { 
+        opacity: 0.6; 
+        transform: scale(1) rotate(0deg);
+        text-shadow: 0 0 5px #a0d8ff;
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.2) rotate(180deg);
+        text-shadow: 0 0 20px #a0d8ff, 0 0 30px #fff;
+    }
 }
 
 .deco-line {
-    width: 100px;
-    height: 2px;
-    background: var(--gradient-gold);
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(160, 216, 255, 0.8), 
+        transparent);
     border-radius: 2px;
 }
 
 .deco-heart {
-    font-size: 1.5rem;
-    color: var(--red-light);
-    animation: heartbeat 1.5s ease-in-out infinite;
+    font-size: 1.3rem;
+    color: #a0d8ff;
+    animation: snow-float 2.5s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.8);
 }
 
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.2); }
-    50% { transform: scale(1); }
+@keyframes snow-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(15deg); }
 }
 
 .footer-title {
-    font-family: 'Amore Christmas', cursive;
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    color: var(--gold);
+    font-family: 'Lora', serif;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: #e0f0ff;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 1px;
-    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(160, 216, 255, 0.5);
 }
 
 .developers {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 2rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1rem;
+    margin: 1rem 0;
 }
 
 .developer-name {
-    font-family: 'Amore Christmas', cursive;
-    font-size: clamp(1rem, 2.5vw, 1.5rem);
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--red-light) 0%, var(--gold) 50%, var(--green-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% auto;
-    animation: gradient-shift 3s ease infinite;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    letter-spacing: 1px;
-    transition: transform 0.3s ease;
+    font-family: 'Lora', serif;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 500;
+    color: #fff;
     text-decoration: none;
     cursor: pointer;
     display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(160, 216, 255, 0.3);
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.developer-name::before {
+    content: '❄';
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.developer-name::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 40%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 60%);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
 }
 
 .developer-name:hover {
-    transform: scale(1.1);
+    background: rgba(160, 216, 255, 0.2);
+    border-color: rgba(160, 216, 255, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 5px 20px rgba(160, 216, 255, 0.3),
+        0 0 30px rgba(160, 216, 255, 0.2);
+}
+
+.developer-name:hover::after {
+    left: 100%;
 }
 
 a.developer-name {
-    color: inherit;
-}
-
-@keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    color: #fff;
 }
 
 .copyright {
-    font-size: clamp(0.75rem, 2vw, 0.9rem);
-    color: var(--cream);
-    margin-top: 2rem;
-    opacity: 0.8;
-    font-weight: 300;
+    font-family: 'Lora', serif;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    color: rgba(224, 240, 255, 0.6);
+    margin-top: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    font-style: italic;
 }
 
 /* ===================================
@@ -1136,6 +1190,9 @@ a.developer-name {
     }
     
     .countdown-timer {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
         gap: 0.5rem;
     }
     
@@ -1173,17 +1230,18 @@ a.developer-name {
 
 @media (max-width: 480px) {
     .countdown-timer {
-        flex-direction: column;
-        gap: 1rem;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.5rem;
     }
     
     .time-separator {
-        display: none;
+        display: block !important;
     }
     
     .time-unit {
-        min-width: auto;
-        width: 100%;
+        min-width: 60px;
     }
     
     .main-title {

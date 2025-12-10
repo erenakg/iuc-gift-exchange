@@ -11,7 +11,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Merriweather:wght@300;400;700;900&family=Lato:wght@300;400;700&family=Open+Sans:wght@300;400;600;700&family=Amore+Christmas&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Modak&family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Mountains+of+Christmas:wght@400;700&family=Lora:wght@400;500;600;700&family=Lora:ital,wght@1,400;1,500&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -86,7 +86,7 @@
             </h1>
             
             <!-- Decorative Divider -->
-            <div class="divider-stars">⭐ ✨ ⭐ ✨ ⭐</div>
+            <div class="divider-stars">❄ ✦ ❄ ✦ ❄</div>
             
             <!-- CTA Button -->
             <a href="{% url 'register' %}" style="text-decoration: none;">
@@ -160,6 +160,10 @@
                     <div class="step-number">3</div>
                     <h3 class="step-title">Otomatik Eşleşme</h3>
                     <p class="step-description">Sistemimiz seni algoritma ile birisiyle eşleştirecek. Eşleşme sonucunda:</p>
+                    <div class="step-hint">
+                        <span class="hint-icon">💡</span>
+                        <span class="hint-text">Seni ortak zevklere sahip olduğun biriyle eşleştirebilmemiz için ilgi alanlarını doğru seçmelisin.</span>
+                    </div>
                     <div class="step-features">
                         <div class="feature-item">
                             <span class="feature-icon">✨</span>
@@ -186,7 +190,7 @@
                             <span class="feature-icon">💰</span>
                             <div class="feature-content">
                                 <strong class="feature-label">Bütçe</strong>
-                                <span class="feature-text">300-600 TL arası</span>
+                                <span class="feature-text">200-500 TL arası</span>
                             </div>
                         </div>
                         <div class="feature-item">
@@ -209,17 +213,11 @@
             <!-- University Branding -->
             <div class="university-section">
                 <img src="{% static 'images/iuc-logo.png' %}" alt="İstanbul Üniversitesi Cerrahpaşa Logo" class="university-logo">
-                <p class="university-name">İstanbul Üniversitesi - Cerrahpaşa</p>
-                <p class="university-department">Bilgisayar Mühendisliği Bölümü</p>
+                <p class="university-name">Bilgisayar Mühendisliği Bölümü</p>
+                {% comment %} <p class="university-department"></p> {% endcomment %}
             </div>
             
-            <div class="footer-decoration">
-                <span class="deco-star">⭐</span>
-                <span class="deco-line"></span>
-                <span class="deco-star">⭐</span>
-            </div>
-            
-            <h3 class="footer-title">Sevgiyle Hazırlayanlar</h3>
+            <h3 class="footer-title">DevOPS</h3>
             
             <div class="developers">
                 <a href="https://www.linkedin.com/in/merenakgul/" target="_blank" rel="noopener noreferrer" class="developer-name">Mehmet Eren Akgül</a>
@@ -229,13 +227,7 @@
                 <a href="https://www.linkedin.com/in/hakan-tan-221368360" target="_blank" rel="noopener noreferrer" class="developer-name">Hakan Tan</a>
             </div>
             
-            <div class="footer-decoration">
-                <span class="deco-line"></span>
-                <span class="deco-heart">❄️</span>
-                <span class="deco-line"></span>
-            </div>
-            
-            <p class="copyright">© 2025 Yeni Yıl Hediyeleşme. Tüm hakları saklıdır.</p>
+            <p class="copyright">© 2026 Yeni Yıl Hediyeleşme. Tüm hakları saklıdır.</p>
         </div>
     </footer>
 
