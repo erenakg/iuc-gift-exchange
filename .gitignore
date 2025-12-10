@@ -57,3 +57,4 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
+.venv
