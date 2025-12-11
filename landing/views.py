@@ -329,3 +329,44 @@ def verify_email_view(request):
             messages.error(request, "Girdiğiniz kod hatalı veya geçersiz.")
 
     return render(request, 'landing/verify.html')
+
+
+
+
+# landing/views.py EN ALTI
+
+from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.conf import settings
+
+def debug_mail_view(request):
+    # 1. Ayarları Ekrana Bas (Şifreyi gizleyerek)
+    password_durumu = "Var" if settings.EMAIL_HOST_PASSWORD else "YOK!"
+    
+    info = f"""
+    <h1>Mail Debug Ekranı</h1>
+    <p><b>User:</b> {settings.EMAIL_HOST_USER}</p>
+    <p><b>Password Durumu:</b> {password_durumu}</p>
+    <p><b>Host:</b> {settings.EMAIL_HOST}</p>
+    <p><b>Port:</b> {settings.EMAIL_PORT}</p>
+    <p><b>TLS:</b> {settings.EMAIL_USE_TLS}</p>
+    <p><b>SSL:</b> {settings.EMAIL_USE_SSL}</p>
+    <hr>
+    <h3>Gönderim Sonucu:</h3>
+    """
+    
+    # 2. Mail Göndermeyi Dene
+    try:
+        send_mail(
+            'Test Basligi',
+            'Bu Render üzerinden gonderilen test mesajidir.',
+            settings.EMAIL_HOST_USER,
+            ['omerfarukcoskun@ogr.iuc.edu.tr'], # Kendi mail adresin
+            fail_silently=False,
+        )
+        result = "<h2 style='color:green'>✅ BAŞARILI! Mail gitti.</h2>"
+    except Exception as e:
+        # Hatayı ekrana kırmızı yaz
+        result = f"<h2 style='color:red'>❌ HATA: {e}</h2><p>Hata Türü: {type(e).__name__}</p>"
+
+    return HttpResponse(info + result)
