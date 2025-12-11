@@ -12,6 +12,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15, blank=True)
 
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
+    
     def __str__(self):
         return self.user.get_full_name() or self.user.username
 

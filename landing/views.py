@@ -9,6 +9,14 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt 
 from .forms import StudentRegistrationForm
 from .models import EmailVerification, Profile, UserPreference
+from django.contrib import messages
+import random
+
+
+
+
+
+
 
 # ---------------------------------------------------------
 # YARDIMCI FONKSİYONLAR
@@ -63,7 +71,7 @@ def api_register(request):
         try:
             data = json.loads(request.body)
             
-            # Form validasyonunu manuel çağırıyoruz
+            # Form validasyonunu manuel çağırıyoruz 
             form = StudentRegistrationForm(data)
             
             if form.is_valid():
@@ -213,3 +221,111 @@ def api_login(request):
              return JsonResponse({'success': False, 'message': 'Bir hata oluştu'}, status=500)
 
     return JsonResponse({'message': 'Method not allowed'}, status=405)
+
+# landing/views.py içine
+
+
+# ... diğer importların ...
+
+def register_view(request):
+    if request.method == 'POST':
+        form = StudentRegistrationForm(request.POST)
+        if form.is_valid():
+            # 1. Kullanıcıyı kaydet (Pasif olarak)
+            user = form.save(commit=False)
+            user.is_active = False 
+            user.save()
+            
+            # Not: Signal sayesinde Profile zaten oluştu, telefonu oraya kaydetmeye gerek kalmadı
+            # çünkü form.save() sırasında formdaki telefon verisi profile gitmiş olabilir
+            # ya da manuel ekleyebiliriz (aşağıda)
+            if hasattr(user, 'profile'):
+                user.profile.phone = form.cleaned_data.get('phone')
+                user.profile.save()
+
+            # 2. PROFESYONEL KOD ÜRETİMİ (Arkadaşının modelini kullanıyoruz)
+            # Kod üretmek için random kütüphanesine gerek kalmadı, modelde var.
+            code = EmailVerification.generate_code()
+            
+            # Veritabanına kayıt (Süresi ve durumu otomatik ayarlanacak)
+            EmailVerification.objects.create(
+                user=user,
+                code=code
+            )
+
+            # 3. Mail Gönder
+            subject = 'İÜC Hediyeleşme - Doğrulama Kodunuz'
+            message = f'Merhaba {user.first_name},\n\nHesabını doğrulamak için kodun: {code}\n\nBu kod 10 dakika geçerlidir.'
+            
+            try:
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+                print(f"📧 Mail gönderildi: {code}") # Konsolda görelim
+            except Exception as e:
+                print(f"❌ Mail hatası: {e}")
+                messages.error(request, "Mail gönderilemedi, lütfen tekrar deneyin.")
+                return redirect('register')
+
+            # 4. Kullanıcıyı hatırlayalım
+            request.session['verification_user_id'] = user.id
+            
+            # Doğrulama sayfasına yönlendir
+            return redirect('verify_email') 
+            
+    else:
+        form = StudentRegistrationForm()
+
+    return render(request, 'landing/auth.html', {'form': form})
+
+# views.py (En alta ekle)
+
+from django.contrib.auth import login # Kullanıcıyı otomatik giriş yaptırmak için
+
+def verify_email_view(request):
+    # 1. Session'dan kayıt olan kullanıcının ID'sini al
+    user_id = request.session.get('verification_user_id')
+    
+    # Eğer session'da id yoksa (sayfaya izinsiz girmeye çalışıyorsa) login'e at
+    if not user_id:
+        messages.error(request, "Önce kayıt olmalısınız.")
+        return redirect('register')
+
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        
+        # 2. Veritabanında bu kullanıcıya ait, kullanılmamış bu kodu ara
+        verification = EmailVerification.objects.filter(
+            user=user, 
+            code=code, 
+            is_used=False
+        ).first()
+
+        if verification:
+            # 3. Kod bulundu, peki süresi dolmuş mu?
+            if not verification.is_expired():
+                # --- BAŞARILI SENARYO ---
+                
+                # A) Kullanıcıyı Aktif Et
+                user.is_active = True
+                user.save()
+                
+                # B) Kodu kullanıldı olarak işaretle (Bir daha kullanamasın)
+                verification.is_used = True
+                verification.save()
+                
+                # C) Otomatik Giriş Yaptır
+                login(request, user)
+                
+                # D) Session temizliği
+                del request.session['verification_user_id']
+                
+                messages.success(request, "Hesabınız başarıyla doğrulandı! 🎉")
+                return redirect('preferences') # Tercihler sayfasına gönder
+            
+            else:
+                messages.error(request, "Bu kodun süresi dolmuş. Lütfen yeni kod isteyin.")
+        else:
+            messages.error(request, "Girdiğiniz kod hatalı veya geçersiz.")
+
+    return render(request, 'landing/verify.html')
