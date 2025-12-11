@@ -106,10 +106,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py en altı
 
-# E-posta Ayarları
+# 📧 E-POSTA AYARLARI (SSL - Port 465)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('iucdevops1453') # Senin gmail adresin
-EMAIL_HOST_PASSWORD = os.getenv('nkgc jhnv vxvh fvfv') # Az önce aldığın 16 haneli şifre
+EMAIL_PORT = 465  # <-- DİKKAT: 587 yerine 465 yaptık
+EMAIL_USE_TLS = False  # <-- Bunu kapattık
+EMAIL_USE_SSL = True   # <-- Bunu AÇTIK (Render bunu daha çok sever)
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_TIMEOUT = 10  # <-- 10 saniye içinde bağlanamazsa hata versin (sonsuz döngüye girmesin)
