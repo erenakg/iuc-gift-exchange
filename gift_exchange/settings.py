@@ -106,12 +106,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py en altı
 
-# 📧 E-POSTA AYARLARI (BREVO - Port 2525)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'  # Gmail yerine Brevo sunucusu
-EMAIL_PORT = 2525                      # Render'ın izin verdiği sihirli port 🔓
-EMAIL_USE_TLS = True                   # Güvenlik açık
-EMAIL_USE_SSL = False                  # SSL kapalı
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587  # 2525 yerine 587 (TLS standardı)
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_TIMEOUT = 30
