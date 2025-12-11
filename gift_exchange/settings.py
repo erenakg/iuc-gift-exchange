@@ -3,18 +3,37 @@ Django settings for gift_exchange project.
 """
 
 import os
-from pathlib import Path
 import dj_database_url
+from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables BEFORE using them
+# 1. LOCAL GELİŞTİRME İÇİN .ENV YÜKLEME
+# Render'da bu dosya olmayacak, Render kendi panelinden okuyacak.
+# Bilgisayarında ise .env dosyasından okuyacak.
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-change-this-in-production-123456789'
-DEBUG = True
+# ---------------------------------------------------------
+# 🔒 GÜVENLİK AYARLARI
+# ---------------------------------------------------------
+
+# SECRET_KEY'i ortam değişkeninden al, yoksa (localde) varsayılanı kullan
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-dev')
+
+# Render'da RENDER=true diye bir değişken otomatik vardır.
+# Eğer Render'daysak DEBUG False olsun, yoksa True olsun.
+DEBUG = 'RENDER' not in os.environ
+
+# Render uygulamanızın adresi buraya gelmeli.
+# '*' şimdilik kalsın ama prodüksiyonda 'senin-app.onrender.com' olması daha iyidir.
 ALLOWED_HOSTS = ['*']
+
+# Render'da form gönderirken hata almamak için:
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.onrender.com',
+    # Eğer özel alan adı alırsan onu da buraya ekle örn: 'https://mysite.com'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,12 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'landing',
+    'landing', # Senin uygulaman
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # WhiteNoise burada olmalı
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,32 +78,32 @@ WSGI_APPLICATION = 'gift_exchange.wsgi.application'
 
 
 # ---------------------------------------------------------
-# 🗄️ VERİTABANI AYARLARI (RENDER & LOCAL POSTGRESQL)
+# 🗄️ VERİTABANI AYARLARI (SUPABASE & LOCAL)
 # ---------------------------------------------------------
 
-# 1. Durum: Render Sunucusu (DATABASE_URL var mı?)
+# Render'a eklediğimiz DATABASE_URL varsa onu kullanır (Supabase)
 if os.environ.get("DATABASE_URL"):
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get("DATABASE_URL"),
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=True 
         )
     }
-
-# 2. Durum: Senin Bilgisayarın (Lokal PostgreSQL)
 else:
+    # Local bilgisayarında çalışırken burası çalışır
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            # 👇 AŞAĞIDAKİLERİ KENDİ pgAdmin BİLGİLERİNE GÖRE DOLDUR! 👇
-            'NAME': 'postgres',       # pgAdmin'deki veritabanı adın (genelde postgres'tir veya yeni açtıysan odur)
-            'USER': 'postgres',       # Kullanıcı adın (genelde postgres)
-            'PASSWORD': '12345',      # pgAdmin'e girerken yazdığın şifre
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': '12345', # Kendi yerel şifren
             'HOST': 'localhost',
             'PORT': '5432',
         }
     }
+
+
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -98,17 +117,25 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# ---------------------------------------------------------
+# 🎨 STATİK DOSYALAR (CSS, JS, IMAGES)
+# ---------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# WhiteNoise sıkıştırması
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py en altı
-
+# ---------------------------------------------------------
+# 📧 EMAIL AYARLARI
+# ---------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'omerfaruk14411441@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') # Render'dan alacak
+# Şifreyi asla kodun içine yazma, Env'den çek
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
