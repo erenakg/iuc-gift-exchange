@@ -103,7 +103,6 @@ def api_register(request):
                     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
                     return JsonResponse({'success': True, 'message': 'Kod gönderildi'})
                 except Exception as e:
-<<<<<<< HEAD
                     import traceback
                     logger.error('Kayıt Hatası: %s', e, exc_info=True)
                     print('Kayıt Hatası:', e)
@@ -111,10 +110,6 @@ def api_register(request):
                     # Mail gönderiminde hata oldu fakat kullanıcıyı silmiyoruz.
                     # Böylece kullanıcı tekrar mail isteyebilir veya destekle iletişime geçebilir.
                     return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. Lütfen tekrar deneyin.'}, status=500)
-=======
-                    user.delete()
-                    return JsonResponse({'success': False, 'message': f'Mail gönderilemedi: {str(e)}'}, status=500)
->>>>>>> b26bfceabc3adb4bf2a7d8814cc9999b366a3879
             
             else:
                 # Form hatalarını topla (İlk hatayı döndür)
