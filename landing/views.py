@@ -65,7 +65,14 @@ def preferences_view(request):
 
 @csrf_exempt 
 def api_register(request):
+    
     """Kayıt olma ve Kod Gönderme"""
+    # --- DEBUG AJANI BAŞLANGIÇ ---
+    print(f"🛑 GELEN İSTEK: {request.path}")
+    print(f"🛑 METHOD TÜRÜ: {request.method}")
+    print(f"🛑 BODY VERİSİ: {request.body}")
+    # --- DEBUG AJANI BİTİŞ ---
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -238,17 +245,11 @@ def api_login(request):
 
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
+# YENİ VE TEMİZ HALİ
 def register_view(request):
-    if request.method == 'POST':
-        # Senin formunun adı StudentRegistrationForm!
-        form = StudentRegistrationForm(request.POST) 
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = StudentRegistrationForm() # Burayı da düzelt
+    """Sadece kayıt sayfasını açar, işlemi JavaScript yapar"""
+    return render(request, 'landing/auth.html')
 
-    return render(request, 'landing/auth.html', {'form': form})
 
 def verify_email_view(request):
     """Eski doğrulama sayfası - Şimdi kullanılmıyor"""
