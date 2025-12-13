@@ -238,21 +238,17 @@ def api_login(request):
 
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-
 def register_view(request):
-    # 1. Senaryo: Kullanıcı butona bastı (Veri geldi -> POST)
     if request.method == 'POST':
-        form = RegisterForm(request.POST) # Gelen veriyi forma doldur
+        # Senin formunun adı StudentRegistrationForm!
+        form = StudentRegistrationForm(request.POST) 
         if form.is_valid():
-            form.save() # Veritabanına yaz
-            return redirect('home') # Başarılıysa anasayfaya at
-            
-    # 2. Senaryo: Kullanıcı sayfayı ilk kez açtı (Veri yok -> GET)
+            form.save()
+            return redirect('home')
     else:
-        form = RegisterForm()
+        form = StudentRegistrationForm() # Burayı da düzelt
 
     return render(request, 'register.html', {'form': form})
-
 
 def verify_email_view(request):
     """Eski doğrulama sayfası - Şimdi kullanılmıyor"""
