@@ -126,12 +126,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ---------------------------------------------------------
-# 📧 EMAIL AYARLARI
 # ---------------------------------------------------------
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'devopsiuc@gmail.com'
-# Şifreyi asla kodun içine yazma, Env'den çek
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# 📧 EMAIL AYARLARI (SENDGRID HTTP API)
+# ---------------------------------------------------------
+INSTALLED_APPS += ['anymail']
+
+EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
+ANYMAIL = {
+    'SENDGRID_API_KEY': os.environ.get('SENDGRID_API_KEY'),
+}
+DEFAULT_FROM_EMAIL = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@iuc-gift-exchange.com')
+
+# Gmail SMTP ayarları kaldırıldı. Artık SendGrid HTTP API kullanılacak.
