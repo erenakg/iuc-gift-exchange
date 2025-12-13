@@ -239,10 +239,19 @@ def api_login(request):
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
 
-# ESKI SİSTEM İÇİN (Artık kullanılmıyor ama silme)
 def register_view(request):
-    """Eski Django form sistemi - Şimdi kullanılmıyor"""
-    return redirect('auth_page')
+    # 1. Senaryo: Kullanıcı butona bastı (Veri geldi -> POST)
+    if request.method == 'POST':
+        form = RegisterForm(request.POST) # Gelen veriyi forma doldur
+        if form.is_valid():
+            form.save() # Veritabanına yaz
+            return redirect('home') # Başarılıysa anasayfaya at
+            
+    # 2. Senaryo: Kullanıcı sayfayı ilk kez açtı (Veri yok -> GET)
+    else:
+        form = RegisterForm()
+
+    return render(request, 'register.html', {'form': form})
 
 
 def verify_email_view(request):

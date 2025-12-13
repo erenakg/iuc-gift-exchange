@@ -22,10 +22,10 @@ urlpatterns = [
     path('dogrula/', views.verify_email_view, name='verify_email'),
     
     # API Endpoints (Bunlara dokunma, dursunlar)
-    path('api/auth/resend-code', views.api_resend_code, name='api_resend'),
+    path('api/auth/resend-code/', views.api_resend_code, name='api_resend'),
     path('api/auth/send-verification/', views.api_register, name='api_register'),
-    path('api/auth/verify-code', views.api_verify_code, name='api_verify'),
-    path('api/auth/login', views.api_login, name='api_login'),
+    path('api/auth/verify-code/', views.api_verify_code, name='api_verify'),
+    path('api/auth/login/', views.api_login, name='api_login'),
     
 
     # urls.py içine
