@@ -48,7 +48,7 @@ ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
-    'https://iucdevops.com', # Eğer domainin buysa bunu da ekle
+    'https://iucdevops.com', 
 ]
 
 INSTALLED_APPS = [
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'anymail',  # <--- KRİTİK: BUNU EKLEDİM!
+    'anymail',  
     'landing', 
 ]
 
@@ -159,3 +159,6 @@ if SENDGRID_API_KEY:
 else:
     # API Key yoksa hata vermesin, terminale bassın (Local Test için)
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if not SENDGRID_API_KEY:
+    print("UYARI: SENDGRID_API_KEY BULUNAMADI! MAİL GİTMEYECEK.")
