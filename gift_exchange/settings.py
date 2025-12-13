@@ -1,3 +1,5 @@
+
+# (LOGGING tanımı BASE_DIR tanımlandıktan sonra yeniden eklenecek)
 """
 Django settings for gift_exchange project.
 """
@@ -13,6 +15,35 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# ---------------------------------------------------------
+# LOGGING AYARLARI (Tüm hataları terminale ve dosyaya yaz)
+# ---------------------------------------------------------
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': str(BASE_DIR / 'django-error.log'),
+            'level': 'ERROR',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'ERROR',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 
 # ---------------------------------------------------------
 # 🔒 GÜVENLİK AYARLARI
@@ -127,14 +158,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ---------------------------------------------------------
 # ---------------------------------------------------------
-# 📧 EMAIL AYARLARI (SENDGRID HTTP API)
+# 📧 EMAIL AYARLARI (SENDGRID - SMTP fallback)
 # ---------------------------------------------------------
-INSTALLED_APPS += ['anymail']
+# Tercih: Anymail'in resmi SendGrid desteği artık önerilmediği için
+# burada SendGrid'in SMTP arayüzünü kullanıyoruz. Render/production'da
+# environment değişkenlerine `SENDGRID_API_KEY` ve `SENDGRID_FROM_EMAIL` ekle.
 
-EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
-ANYMAIL = {
-    'SENDGRID_API_KEY': os.environ.get('SENDGRID_API_KEY'),
-}
-DEFAULT_FROM_EMAIL = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@iuc-gift-exchange.com')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = os.environ.get('SENDGRID_FROM_EMAIL', 'noreply@iucdevops.com')
 
-# Gmail SMTP ayarları kaldırıldı. Artık SendGrid HTTP API kullanılacak.
+if SENDGRID_API_KEY:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_HOST_USER = 'apikey'  # SendGrid SMTP kullanıcı adı sabittir
+    EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+else:
+    # Geliştirme ortamı için console backend (mail terminale yazılır)
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Not: SendGrid panelinde `DEFAULT_FROM_EMAIL` adresinin verify edildiğinden emin ol.

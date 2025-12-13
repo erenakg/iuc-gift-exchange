@@ -11,6 +11,9 @@ from .forms import StudentRegistrationForm
 from .models import EmailVerification, Profile, UserPreference
 from django.contrib import messages
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -97,11 +100,16 @@ def api_register(request):
                 message = f'Merhaba {user.first_name},\n\nHesabını doğrulamak için kodun:\n\n{code}\n\nBu kod 10 dakika geçerlidir.'
                 
                 try:
-                    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
                     return JsonResponse({'success': True, 'message': 'Kod gönderildi'})
                 except Exception as e:
-                    user.delete()
-                    return JsonResponse({'success': False, 'message': 'Mail gönderilemedi.'}, status=500)
+                    import traceback
+                    logger.error('Kayıt Hatası: %s', e, exc_info=True)
+                    print('Kayıt Hatası:', e)
+                    traceback.print_exc()
+                    # Mail gönderiminde hata oldu fakat kullanıcıyı silmiyoruz.
+                    # Böylece kullanıcı tekrar mail isteyebilir veya destekle iletişime geçebilir.
+                    return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. Lütfen tekrar deneyin.'}, status=500)
             
             else:
                 # Form hatalarını topla (İlk hatayı döndür)
@@ -182,10 +190,11 @@ def api_resend_code(request):
             message = f'Merhaba {user.first_name},\n\n Yeni kodunuz:\n\n{code}\n\n10 dakika geçerlidir.'
             
             try:
-                send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
                 return JsonResponse({'success': True, 'message': 'Yeni kod gönderildi!'})
-            except:
-                return JsonResponse({'success': False, 'message': 'Mail gönderilemedi.'}, status=500)
+            except Exception as e:
+                logger.error('Resend mail hatası: %s', e, exc_info=True)
+                return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. Lütfen tekrar deneyin.'}, status=500)
 
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=500)
@@ -258,7 +267,7 @@ def register_view(request):
             message = f'Merhaba {user.first_name},\n\nHesabını doğrulamak için kodun: {code}\n\nBu kod 10 dakika geçerlidir.'
             
             try:
-                send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
                 print(f"📧 Mail gönderildi: {code}") # Konsolda görelim
             except Exception as e:
                 print(f"❌ Mail hatası: {e}")
@@ -365,7 +374,7 @@ def debug_mail_view(request):
         send_mail(
             subject='Test Basligi - Render',
             message='Bu Render üzerinden gonderilen test mesajidir. Eger bunu okuyorsan sistem calisiyor demektir.',
-            from_email=user,
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=['omerfarukcoskun@ogr.iuc.edu.tr'], # Kendi mailin
             fail_silently=False,
         )
