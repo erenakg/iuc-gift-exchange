@@ -666,6 +666,14 @@
             resend: '/api/auth/resend-code'
         };
 
+        // CSRF helper (reads csrftoken from cookie)
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return '';
+        }
+
         let currentEmail = '';
 
         // Mesaj Gösterme
@@ -707,7 +715,11 @@
             try {
                 const res = await fetch(API.register, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
                     body: JSON.stringify(data)
                 });
                 const result = await res.json();
@@ -761,7 +773,11 @@
             try {
                 const res = await fetch(API.verify, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
                     body: JSON.stringify({ email: currentEmail, code: code })
                 });
                 const result = await res.json();
@@ -792,7 +808,11 @@
             try {
                 const res = await fetch(API.resend, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
                     body: JSON.stringify({ email: currentEmail })
                 });
                 const result = await res.json();
@@ -823,7 +843,11 @@
             try {
                 const res = await fetch(API.login, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
                     body: JSON.stringify(data)
                 });
                 const result = await res.json();
