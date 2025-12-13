@@ -248,7 +248,7 @@ def register_view(request):
     else:
         form = StudentRegistrationForm() # Burayı da düzelt
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'landing/auth.html', {'form': form})
 
 def verify_email_view(request):
     """Eski doğrulama sayfası - Şimdi kullanılmıyor"""
