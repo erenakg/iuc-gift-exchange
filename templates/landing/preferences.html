@@ -94,6 +94,19 @@
             font-weight: 300;
         }
 
+        .selection-counter {
+            margin-top: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #selection-count {
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
         /* Content Card */
         .content-card {
             background: rgba(255, 255, 255, 0.95);
@@ -208,35 +221,283 @@
             transform: rotate(180deg);
         }
 
-        /* Subcategories */
-        .subcategories {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: rgba(196, 30, 58, 0.1);
-            border: 3px solid var(--red-primary);
-            border-radius: 12px;
-            animation: slideDown 0.3s ease;
+        /* Main Categories (3 buttons at top) */
+        .main-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        @keyframes slideDown {
+        .main-category-item {
+            background: var(--green-primary);
+            border: 4px solid var(--dark);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .main-category-item:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px var(--dark);
+            background: var(--green-dark);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+        }
+
+        .category-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--gold);
+            color: var(--dark);
+            border: 3px solid var(--dark);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border: 5px solid var(--dark);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                max-height: 0;
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
-                max-height: 2000px;
+                transform: translateY(0);
             }
         }
 
-        .subcategory-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--red-primary);
-            margin-bottom: 1rem;
+        .modal-header {
+            background: var(--red-primary);
+            padding: 1.5rem 2rem;
+            border-bottom: 4px solid var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--white);
             text-transform: uppercase;
         }
 
+        .modal-close {
+            background: var(--dark);
+            color: var(--white);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            position: relative;
+        }
+
+        .modal-close:hover {
+            background: var(--red-dark);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* Warning Alert */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border: 5px solid var(--dark);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            max-width: 400px;
+            text-align: center;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(-5deg); }
+            75% { transform: translate(-50%, -50%) rotate(5deg); }
+        }
+
+        .alert.active {
+            display: block;
+        }
+
+        .alert-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-message {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--red-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-button {
+            background: var(--red-primary);
+            color: var(--white);
+            border: 3px solid var(--dark);
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .alert-button:hover {
+            background: var(--red-dark);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px var(--dark);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border: 5px solid var(--dark);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            max-width: 500px;
+            text-align: center;
+            animation: successPop 0.6s ease;
+        }
+
+        @keyframes successPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .success-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--green-primary);
+            text-transform: uppercase;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            margin-top: 0.5rem;
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        #char-count {
+            color: var(--red-primary);
+            font-weight: 700;
+        }
+
+        /* Subcategories */
         .preference-item.sub-item {
             background: rgba(255, 255, 255, 0.95);
             border: 2px solid var(--dark);
@@ -340,6 +601,35 @@
             .preferences-grid {
                 grid-template-columns: 1fr;
             }
+
+            .main-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.3rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .alert, .success-message {
+                max-width: 90%;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -350,6 +640,9 @@
             <span class="header-icon">🎁</span>
             <h1 class="header-title">Tercihlerim</h1>
             <p class="header-subtitle">Sevdiğin şeyleri seç, arkadaşların sana mükemmel hediye bulsun!</p>
+            <p class="selection-counter">
+                <span id="selection-count">0</span> / 10 Seçim Yapıldı
+            </p>
         </div>
 
         <!-- Preferences Form -->
@@ -358,6 +651,27 @@
             
             <div class="content-card">
                 <h2 class="section-title">🎨 Hobilerim</h2>
+                
+                <!-- Main Categories (always visible at top) -->
+                <div class="main-categories">
+                    <div class="main-category-item" onclick="openModal('cinema')">
+                        <span class="category-icon">🎬</span>
+                        <span class="category-label">Sinema / Film</span>
+                        <span class="category-badge" id="cinema-count">0</span>
+                    </div>
+                    <div class="main-category-item" onclick="openModal('music')">
+                        <span class="category-icon">🎵</span>
+                        <span class="category-label">Müzik</span>
+                        <span class="category-badge" id="music-count">0</span>
+                    </div>
+                    <div class="main-category-item" onclick="openModal('sports')">
+                        <span class="category-icon">⚽</span>
+                        <span class="category-label">Spor</span>
+                        <span class="category-badge" id="sports-count">0</span>
+                    </div>
+                </div>
+                
+                <!-- Regular Preferences Grid -->
                 <div class="preferences-grid">
                     <div class="preference-item" onclick="togglePreference(this, 'new_tastes')">
                         <div class="preference-checkbox"></div>
@@ -388,24 +702,6 @@
                         <div class="preference-checkbox"></div>
                         <span class="preference-icon">🎮</span>
                         <span class="preference-label">Video Oyunları (Genel)</span>
-                    </div>
-                    <div class="preference-item expandable" onclick="toggleExpandable(this, 'cinema')">
-                        <div class="preference-checkbox"></div>
-                        <span class="preference-icon">🎬</span>
-                        <span class="preference-label">Sinema / Film</span>
-                        <span class="expand-icon">▼</span>
-                    </div>
-                    <div class="preference-item expandable" onclick="toggleExpandable(this, 'music')">
-                        <div class="preference-checkbox"></div>
-                        <span class="preference-icon">🎵</span>
-                        <span class="preference-label">Müzik</span>
-                        <span class="expand-icon">▼</span>
-                    </div>
-                    <div class="preference-item expandable" onclick="toggleExpandable(this, 'sports')">
-                        <div class="preference-checkbox"></div>
-                        <span class="preference-icon">⚽</span>
-                        <span class="preference-label">Spor</span>
-                        <span class="expand-icon">▼</span>
                     </div>
                     <div class="preference-item" onclick="togglePreference(this, 'entrepreneurship')">
                         <div class="preference-checkbox"></div>
@@ -533,181 +829,17 @@
                         <span class="preference-label">Resim Çizmek</span>
                     </div>
                 </div>
-                
-                <!-- Cinema Sub-categories -->
-                <div class="subcategories" id="cinema-sub" style="display: none;">
-                    <h3 class="subcategory-title">Film Türleri</h3>
-                    <div class="preferences-grid">
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_action')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Aksiyon</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_adventure')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Macera</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_scifi')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Bilim Kurgu</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_fantasy')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Fantastik</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_horror')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Korku / Gerilim</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_drama')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Dram</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_romance')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Romantik</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_comedy')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Komedi</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_crime')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Suç</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_animation')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Animasyon</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_documentary')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Belgesel</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_history')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Tarih</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_musical')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Müzikal</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'cinema_biography')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Biyografi</span>
-                        </div>
+            </div>
+
+            <!-- Modal for Sub-categories -->
+            <div class="modal" id="categoryModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalTitle"></h3>
+                        <button type="button" class="modal-close" onclick="closeModal()">✕</button>
                     </div>
-                </div>
-                
-                <!-- Music Sub-categories -->
-                <div class="subcategories" id="music-sub" style="display: none;">
-                    <h3 class="subcategory-title">Müzik Türleri</h3>
-                    <div class="preferences-grid">
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_classical')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Klasik Müzik</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_jazz')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Jazz</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_blues')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Bluz</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_rock')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Rock</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_metal')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Metal</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_pop')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Pop</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_electronic')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Elektronik Müzik</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_hiphop')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Rap/Hip-Hop</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_popularrap')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Popüler Rap</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'music_kpop')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">K-Pop</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Sports Sub-categories -->
-                <div class="subcategories" id="sports-sub" style="display: none;">
-                    <h3 class="subcategory-title">Spor Dalları</h3>
-                    <div class="preferences-grid">
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_basketball')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Basketbol</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_volleyball')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Voleybol</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_football')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Futbol</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_combat')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Dövüş Sporları</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_swimming')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Yüzmek</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_athletics')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Atletizm</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_tennis')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Masa Tenisi / Tenis</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_bodybuilding')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Vücut Geliştirme</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_hiking')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Doğa Yürüyüşü / Kamp</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_climbing')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Dağcılık</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_skating')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Paten</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_skateboard')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Kaykay</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_archery')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Okçuluk</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_trekking')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Trekking</span>
-                        </div>
-                        <div class="preference-item sub-item" onclick="togglePreference(this, 'sports_skiing')">
-                            <div class="preference-checkbox"></div>
-                            <span class="preference-label">Kayak</span>
-                        </div>
+                    <div class="modal-body">
+                        <div class="preferences-grid" id="modalGrid"></div>
                     </div>
                 </div>
             </div>
@@ -718,8 +850,12 @@
                     <textarea 
                         name="additional_notes" 
                         class="text-input" 
-                        placeholder="Sevdiğin renkler, markalar veya özel isteklerin varsa buraya yazabilirsin..."
+                        maxlength="40"
+                        placeholder="Sevdiğin renkler, markalar... (max 40 karakter)"
                     ></textarea>
+                    <div class="char-counter">
+                        <span id="char-count">0</span> / 40 karakter
+                    </div>
                 </div>
                 
                 <button type="submit" class="submit-button">
@@ -734,36 +870,155 @@
         </div>
     </div>
 
+    <!-- Alert for max selection -->
+    <div class="alert" id="maxAlert">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-message">Maksimum 10 tercih seçebilirsiniz!</div>
+        <button type="button" class="alert-button" onclick="closeAlert()">Tamam</button>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✅</div>
+        <div class="success-text">Tercihleriniz Başarıyla Kaydedildi!</div>
+    </div>
+
     <script>
         // Hidden inputs to store selected preferences
         const selectedPreferences = new Set();
+        const MAX_SELECTIONS = 10;
 
-        function togglePreference(element, value) {
-            element.classList.toggle('selected');
-            
-            if (selectedPreferences.has(value)) {
-                selectedPreferences.delete(value);
-            } else {
-                selectedPreferences.add(value);
+        // Sub-category data
+        const subCategories = {
+            cinema: {
+                title: '🎬 Film Türleri',
+                items: [
+                    {label: 'Aksiyon', value: 'cinema_action'},
+                    {label: 'Macera', value: 'cinema_adventure'},
+                    {label: 'Bilim Kurgu', value: 'cinema_scifi'},
+                    {label: 'Fantastik', value: 'cinema_fantasy'},
+                    {label: 'Korku / Gerilim', value: 'cinema_horror'},
+                    {label: 'Dram', value: 'cinema_drama'},
+                    {label: 'Romantik', value: 'cinema_romance'},
+                    {label: 'Komedi', value: 'cinema_comedy'},
+                    {label: 'Suç', value: 'cinema_crime'},
+                    {label: 'Animasyon', value: 'cinema_animation'},
+                    {label: 'Belgesel', value: 'cinema_documentary'},
+                    {label: 'Tarih', value: 'cinema_history'},
+                    {label: 'Müzikal', value: 'cinema_musical'},
+                    {label: 'Biyografi', value: 'cinema_biography'}
+                ]
+            },
+            music: {
+                title: '🎵 Müzik Türleri',
+                items: [
+                    {label: 'Klasik Müzik', value: 'music_classical'},
+                    {label: 'Jazz', value: 'music_jazz'},
+                    {label: 'Bluz', value: 'music_blues'},
+                    {label: 'Rock', value: 'music_rock'},
+                    {label: 'Metal', value: 'music_metal'},
+                    {label: 'Pop', value: 'music_pop'},
+                    {label: 'Elektronik Müzik', value: 'music_electronic'},
+                    {label: 'Rap/Hip-Hop', value: 'music_hiphop'},
+                    {label: 'Popüler Rap', value: 'music_popularrap'},
+                    {label: 'K-Pop', value: 'music_kpop'}
+                ]
+            },
+            sports: {
+                title: '⚽ Spor Dalları',
+                items: [
+                    {label: 'Basketbol', value: 'sports_basketball'},
+                    {label: 'Voleybol', value: 'sports_volleyball'},
+                    {label: 'Futbol', value: 'sports_football'},
+                    {label: 'Dövüş Sporları', value: 'sports_combat'},
+                    {label: 'Yüzmek', value: 'sports_swimming'},
+                    {label: 'Atletizm', value: 'sports_athletics'},
+                    {label: 'Masa Tenisi / Tenis', value: 'sports_tennis'},
+                    {label: 'Vücut Geliştirme', value: 'sports_bodybuilding'},
+                    {label: 'Doğa Yürüyüşü / Kamp', value: 'sports_hiking'},
+                    {label: 'Dağcılık', value: 'sports_climbing'},
+                    {label: 'Paten', value: 'sports_skating'},
+                    {label: 'Kaykay', value: 'sports_skateboard'},
+                    {label: 'Okçuluk', value: 'sports_archery'},
+                    {label: 'Trekking', value: 'sports_trekking'},
+                    {label: 'Kayak', value: 'sports_skiing'}
+                ]
             }
-            
-            // Update or create hidden input
-            updateHiddenInput();
+        };
+
+        function updateSelectionCount() {
+            document.getElementById('selection-count').textContent = selectedPreferences.size;
         }
 
-        function toggleExpandable(element, category) {
+        function updateCategoryBadge(category) {
+            const count = Array.from(selectedPreferences).filter(v => v.startsWith(category + '_')).length;
+            document.getElementById(category + '-count').textContent = count;
+        }
+
+        function togglePreference(element, value) {
             event.stopPropagation();
             
-            // Toggle the expandable item itself
-            element.classList.toggle('expanded');
-            
-            // Toggle subcategories visibility
-            const subCategoriesDiv = document.getElementById(category + '-sub');
-            if (subCategoriesDiv.style.display === 'none' || subCategoriesDiv.style.display === '') {
-                subCategoriesDiv.style.display = 'block';
+            if (selectedPreferences.has(value)) {
+                // Deselect
+                selectedPreferences.delete(value);
+                element.classList.remove('selected');
             } else {
-                subCategoriesDiv.style.display = 'none';
+                // Check max limit
+                if (selectedPreferences.size >= MAX_SELECTIONS) {
+                    showAlert();
+                    return;
+                }
+                // Select
+                selectedPreferences.add(value);
+                element.classList.add('selected');
             }
+            
+            updateSelectionCount();
+            updateHiddenInput();
+            
+            // Update category badge if it's a subcategory item
+            for (let category in subCategories) {
+                if (value.startsWith(category + '_')) {
+                    updateCategoryBadge(category);
+                }
+            }
+        }
+
+        function openModal(category) {
+            const modal = document.getElementById('categoryModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalGrid = document.getElementById('modalGrid');
+            
+            const data = subCategories[category];
+            modalTitle.textContent = data.title;
+            
+            // Clear and populate grid
+            modalGrid.innerHTML = '';
+            data.items.forEach(item => {
+                const isSelected = selectedPreferences.has(item.value);
+                const div = document.createElement('div');
+                div.className = 'preference-item sub-item' + (isSelected ? ' selected' : '');
+                div.onclick = function() { togglePreference(this, item.value); };
+                div.innerHTML = `
+                    <div class="preference-checkbox"></div>
+                    <span class="preference-label">${item.label}</span>
+                `;
+                modalGrid.appendChild(div);
+            });
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('categoryModal').classList.remove('active');
+        }
+
+        function showAlert() {
+            document.getElementById('maxAlert').classList.add('active');
+        }
+
+        function closeAlert() {
+            document.getElementById('maxAlert').classList.remove('active');
         }
 
         function updateHiddenInput() {
@@ -781,6 +1036,51 @@
             input.value = Array.from(selectedPreferences).join(',');
             form.appendChild(input);
         }
+
+        // Character counter for textarea
+        const textarea = document.querySelector('.text-input');
+        const charCount = document.getElementById('char-count');
+        
+        textarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // Form submission with success message
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('{% url "preferences" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('successMessage').classList.add('active');
+                    
+                    // Redirect to home after 2 seconds
+                    setTimeout(function() {
+                        window.location.href = '{% url "home" %}';
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('categoryModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>

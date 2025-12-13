@@ -55,7 +55,7 @@ def preferences_view(request):
                 'additional_notes': notes
             }
         )
-        return redirect('home')
+        return JsonResponse({'success': True, 'message': 'Tercihler kaydedildi'})
         
     return render(request, 'landing/preferences.html')
 
@@ -86,9 +86,11 @@ def api_register(request):
                 user.is_active = False
                 user.save()
 
-                # Profil oluştur
+                # Profil oluştur ve telefonu kaydet
                 phone = form.cleaned_data.get('phone', '')
-                Profile.objects.get_or_create(user=user, defaults={'phone': phone})
+                profile, created = Profile.objects.get_or_create(user=user)
+                profile.phone = phone
+                profile.save()
 
                 # 2. Kod üret ve kaydet
                 code = EmailVerification.generate_code()

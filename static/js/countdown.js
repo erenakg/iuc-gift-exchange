@@ -1,6 +1,6 @@
 /**
  * Registration Deadline Countdown Timer
- * Calculates and displays time remaining until December 19, 2025
+ * Calculates and displays time remaining until January 1, 2026
  */
 
 // Function to calculate time remaining
@@ -8,8 +8,8 @@ function updateCountdown() {
     // Get current date
     const now = new Date();
     
-    // Target date: December 19, 2025 at 23:59:59
-    const targetDate = new Date(2025, 11, 19, 23, 59, 59); // Month is 0-indexed, so 11 = December
+    // Target date: January 1, 2026 at 00:00:00
+    const targetDate = new Date(2026, 0, 1, 0, 0, 0); // Month is 0-indexed, so 0 = January
     
     // Calculate time difference in milliseconds
     const timeDifference = targetDate - now;
@@ -44,7 +44,7 @@ function displayDeadlineReached() {
     const countdownTimer = document.querySelector('.countdown-timer');
     
     if (countdownTitle) {
-        countdownTitle.textContent = '⏰ Kayıt Süresi Doldu';
+        countdownTitle.textContent = '🎉 Mutlu Yıllar!';
         countdownTitle.style.fontSize = 'clamp(2rem, 5vw, 3rem)';
         countdownTitle.style.animation = 'pulseGlow 1s ease-in-out infinite';
     }
@@ -52,9 +52,9 @@ function displayDeadlineReached() {
     if (countdownTimer) {
         countdownTimer.innerHTML = `
             <div style="text-align: center; width: 100%;">
-                <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1rem;">🚫</div>
+                <div style="font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 1rem;">🎊</div>
                 <div style="font-size: clamp(1.5rem, 4vw, 2rem); color: var(--gold);">
-                    Kayıt süresi 19 Aralık 2025'te sona erdi.
+                    Yeni yıla hoş geldiniz!
                 </div>
             </div>
         `;
