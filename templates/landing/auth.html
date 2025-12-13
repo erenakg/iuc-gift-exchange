@@ -551,13 +551,8 @@
                 <button class="tab-button active" onclick="switchTab('signup', event)">Kayıt Ol</button>
             </div>
             
-<<<<<<< HEAD
-            <div id="login-form" class="form-container active">
-                <form action="{% url 'api_login' %}" method="post" onsubmit="handleLogin(event)">
-=======
             <div id="login-form" class="form-container">
                 <form onsubmit="handleLogin(event)">
->>>>>>> b26bfceabc3adb4bf2a7d8814cc9999b366a3879
                     <div class="form-group">
                         <label class="form-label">E-posta</label>
                         <div class="input-wrapper">
@@ -579,14 +574,10 @@
                 </form>
             </div>
 
-<<<<<<< HEAD
-            <div id="signup-form" class="form-container">
-                <form action="{% url 'register' %}" method="post">
-                    {% csrf_token %}
-=======
+
             <div id="signup-form" class="form-container active">
                 <form onsubmit="handleRegister(event)">
->>>>>>> b26bfceabc3adb4bf2a7d8814cc9999b366a3879
+
                     <div class="form-group">
                         <label class="form-label">Ad Soyad</label>
                         <div class="input-wrapper">
