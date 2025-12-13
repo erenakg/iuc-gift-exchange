@@ -4,21 +4,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Yeni Yıl Hediyeleşme - Arkadaşlarınız ve ailenizle Yeni Yılı kutlayın">
     <title>İÜC Hediyeleşme</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Modak&family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Mountains+of+Christmas:wght@400;700&family=Lora:wght@400;500;600;700&family=Lora:ital,wght@1,400;1,500&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #FFFFFF;
+            --accent: #C41E3A;
+            --accent-hover: #8B0000;
+            --shadow: 8px 8px 0px var(--primary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Snowflakes - arka planda */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Container */
+        .auth-container {
+            background: var(--secondary);
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 35px;
+            position: relative;
+            z-index: 10;
+            border: 3px solid var(--primary);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            border: 3px solid var(--primary);
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        /* Logo ve Başlık */
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: var(--accent);
+            border: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 4px 4px 0px var(--primary);
+        }
+
+        .auth-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .auth-subtitle {
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* Tab Buttons */
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            border: 3px solid var(--primary);
+            padding: 5px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid transparent;
+            background: transparent;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .tab-button.active {
+            background: var(--accent);
+            color: var(--secondary);
+            border: 2px solid var(--primary);
+            box-shadow: 4px 4px 0px var(--primary);
+            transform: translate(-2px, -2px);
+        }
+
+        /* Forms */
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 3px solid var(--primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: var(--secondary);
+            outline: none;
+        }
+
+        .form-input:focus {
+            box-shadow: 4px 4px 0px var(--primary);
+            transform: translate(-2px, -2px);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        /* Submit Button */
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid var(--primary);
+            background: var(--accent);
+            color: var(--secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:hover {
+            box-shadow: 4px 4px 0px var(--primary);
+            transform: translate(-2px, -2px);
+            background: var(--accent-hover);
+        }
+
+        .submit-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px var(--primary);
+        }
+
+        /* Forgot Password */
+        .forgot-password {
+            text-align: right;
+            margin-top: -12px;
+            margin-bottom: 16px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: underline;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            text-decoration-thickness: 2px;
+        }
+
+        /* Back to Home */
+        .back-home {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-home a {
+            color: var(--primary);
+            text-decoration: underline;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .back-home a:hover {
+            text-decoration-thickness: 2px;
+            gap: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-container {
+                width: 95%;
+                padding: 35px 25px;
+            }
+
+            .auth-title {
+                font-size: 28px;
+            }
+        }
+
+
+        .django-messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px;
+            border: 3px solid var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+        
+        .alert-error, .alert-danger {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border-color: #cc0000;
+        }
+        
+        .alert-success {
+            background-color: #e6ffe6;
+            color: #006600;
+            border-color: #006600;
+        }
+
+        /* Input Validasyon Stilleri */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 5px; /* Hata mesajı için yer */
+        }
+
+        .form-input.input-error {
+            border-color: var(--error);
+            background-color: #fff0f0;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .validation-feedback {
+            font-size: 11px;
+            font-weight: 600;
+            height: 18px; /* Zıplamayı önlemek için sabit yükseklik */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 0 2px;
+        }
+
+        .char-count {
+            color: #666;
+            font-family: monospace;
+        }
+
+        .error-text {
+            color: var(--error);
+            display: none; /* JS ile açılacak */
+        }
+
+        .error-text.visible {
+            display: block;
+        }
+
+        /* Titreme Animasyonu (Kullanıcı yanlış yapınca dikkat çekmek için) */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Diğer stiller (Container, Buttons vs) aynı kalıyor */
+        .auth-container {
+            background: var(--secondary);
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 35px;
+            border: 3px solid var(--primary);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+        }
+
+
+        .verify-card {
+            display: none; /* Varsayılan gizli */
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .verify-card.active {
+            display: block;
+        }
+
+        .verify-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        .code-input-container {
+            margin: 25px 0;
+        }
+
+        .big-code-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 32px;
+            text-align: center;
+            letter-spacing: 15px;
+            font-family: 'Courier New', monospace;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--accent);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .big-code-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.2);
+            border-color: var(--accent);
+        }
+
+        .big-code-input::placeholder {
+            color: #ddd;
+            letter-spacing: 10px;
+        }
+
+        .info-message {
+            background-color: #f0fdf4;
+            border: 2px solid #22c55e;
+            color: #15803d;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .resend-link {
+            background: none;
+            border: none;
+            color: #666;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        
+        .resend-link:hover {
+            color: var(--primary);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+
+    </style>
 </head>
 <body>
-    <!-- Snowflakes Animation -->
+    <!-- Snowflakes Animation (aynı ana sayfadaki gibi) -->
     <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
         <div class="snowflake">❅</div>
         <div class="snowflake">❆</div>
         <div class="snowflake">❅</div>
@@ -71,167 +535,309 @@
         <div class="snowflake">❆</div>
     </div>
 
-    <!-- Hero Section with Custom Wallpaper -->
-    <section class="hero-section-wallpaper">
-        <img src="{% static 'images/wallpaperv.png' %}" alt="Wallpaper" class="hero-wallpaper-image">
+<div class="auth-container">
         
-        <!-- Main Tagline -->
-        <div class="hero-main-tagline">Sadece Notlarını Değil, Mutluluğu da Paylaş!</div>
-        
-        <div class="hero-content-wallpaper">
-            <h1 class="main-title">
-                <span class="title-line">Kampüsündeki yeni arkadaşınla</span>
-                <span class="title-line highlight">ilgi alanlarına göre eşleş,</span>
-                <span class="title-line">sürpriz bir hediye ile gününü güzelleştir.</span>
-            </h1>
-            
-            <!-- Decorative Divider -->
-            <div class="divider-stars">❄ ✦ ❄ ✦ ❄</div>
-            
-            <!-- CTA Button -->
-            <a href="{% url 'register' %}" style="text-decoration: none;">
-                <button class="cta-button">
-                    <span class="button-text">Hediyeleşmeye Başla</span>
-                    <span class="button-icon">🎉</span>
-                </button>
-            </a>
-        </div>
-    </section>
+        <div id="global-message" class="alert" style="display: none;"></div>
 
-    <!-- User Stats Section -->
-    <section class="stats-section">
-        <div class="stats-container">
-            <div class="user-counter">
-                <div class="counter-number" style="font-size: 2.5rem; font-weight: bold;">
-                    {{ total_users }}
-                </div>
-                
-                <div class="counter-label">Kayıtlı Kullanıcı</div>
+        <div id="main-auth-flow">
+            <div class="auth-header">
+                <div class="auth-logo">🎁</div>
+                <h1 class="auth-title">Hoş Geldiniz!</h1>
+                <p class="auth-subtitle">Yeni yıl hediye değişimine katılın</p>
             </div>
-        </div>
-    </section>
-    <!-- How to Work Section with Countdown -->
-    <section class="how-to-work-section">
-        <div class="section-content">
-            <!-- Countdown Timer -->
-            <div class="countdown-container">
-                <h2 class="countdown-title">KAYIT İÇİN SON</h2>
-                <div class="countdown-timer">
-                    <div class="time-unit">
-                        <span class="time-value" id="days">00</span>
-                        <span class="time-label">Gün</span>
-                    </div>
-                    <div class="time-separator">:</div>
-                    <div class="time-unit">
-                        <span class="time-value" id="hours">00</span>
-                        <span class="time-label">Saat</span>
-                    </div>
-                    <div class="time-separator">:</div>
-                    <div class="time-unit">
-                        <span class="time-value" id="minutes">00</span>
-                        <span class="time-label">Dakika</span>
-                    </div>
-                    <div class="time-separator">:</div>
-                    <div class="time-unit">
-                        <span class="time-value" id="seconds">00</span>
-                        <span class="time-label">Saniye</span>
-                    </div>
-                </div>
-            </div>
-            
-            <h2 class="section-title">Nasıl Çalışır</h2>
-            
-            <div class="steps-container">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Kayıt ve Doğrulama</h3>
-                    <p class="step-description">İstanbul Üniversitesi Cerrahpaşa öğrenci mail adresinle (@ogr.iuc.edu.tr) kayıt ol. Mail adresine gönderilen doğrulama kodunu girerek hesabını aktifleştir.</p>
-                    <img src="{% static 'images/resim-1.png' %}" alt="Kayıt ve Doğrulama" class="step-image">
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Profil Oluşturma</h3>
-                    <p class="step-description">İlgi alanlarını ve tercihlerini belirt. Bu bilgiler, eşleştiğin kişinin sana uygun bir hediye seçmesine yardımcı olacak.</p>
-                    <img src="{% static 'images/resim-2.jpg' %}" alt="Profil Oluşturma" class="step-image">
-                </div>
-                
-                <div class="step-card step-card-left-aligned">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Otomatik Eşleşme</h3>
-                    <p class="step-description">Sistemimiz seni algoritma ile birisiyle eşleştirecek. Eşleşme sonucunda:</p>
-                    <div class="step-hint">
-                        <span class="hint-icon">💡</span>
-                        <span class="hint-text">Seni ortak zevklere sahip olduğun biriyle eşleştirebilmemiz için ilgi alanlarını doğru seçmelisin.</span>
-                    </div>
-                    <div class="step-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">✨</span>
-                            <span class="feature-text">Eşleştiğin kişinin ilgi alanlarını ve cinsiyetini göreceksin.</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🔒</span>
-                            <span class="feature-text">Tam isim gizli kalacak. Eşleştiğin kişinin baş harfini ve ortak kodunuzu göreceksin.</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">⏰</span>
-                            <span class="feature-text">Seçtiğin tarih ve saate göre ikinizin de müsait olduğu sürpriz bir saat ve konum göreceksin.</span>
-                        </div>
-                    </div>
-                    <img src="{% static 'images/resim-3s.png' %}" alt="Otomatik Eşleşme" class="step-image">
-                </div>
-                
-                <div class="step-card step-card-left-aligned">
-                    <div class="step-number">4</div>
-                    <h3 class="step-title">Hediye ve Teslim</h3>
-                    <p class="step-description">Belirlenen tarih ve lokasyonda buluşup hediyeni teslim et. Bu bir sürpriz olmalı!</p>
-                    <div class="step-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">💰</span>
-                            <div class="feature-content">
-                                <strong class="feature-label">Bütçe</strong>
-                                <span class="feature-text">200-500 TL arası</span>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📦</span>
-                            <div class="feature-content">
-                                <strong class="feature-label">Teslim</strong>
-                                <span class="feature-text">Belirlenen tarih ve lokasyon</span>
-                            </div>
-                        </div>
-                    </div>
-                    <img src="{% static 'images/resim-4.png' %}" alt="Hediye ve Teslim" class="step-image">
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <!-- University Branding -->
-            <div class="university-section">
-                <img src="{% static 'images/iuc-logo.png' %}" alt="İstanbul Üniversitesi Cerrahpaşa Logo" class="university-logo">
-                <p class="university-name">Bilgisayar Mühendisliği Bölümü</p>
-                {% comment %} <p class="university-department"></p> {% endcomment %}
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="switchTab('login', event)">Giriş Yap</button>
+                <button class="tab-button" onclick="switchTab('signup', event)">Kayıt Ol</button>
             </div>
             
-            <h3 class="footer-title">DevOPS</h3>
-            
-            <div class="developers">
-                <a href="https://www.linkedin.com/in/merenakgul/" target="_blank" rel="noopener noreferrer" class="developer-name">Mehmet Eren Akgül</a>
-                <a href="https://www.linkedin.com/in/ali-r%C4%B1za-g%C3%B6%C3%A7er-06347929b/" target="_blank" rel="noopener noreferrer" class="developer-name">Ali Rıza Göçer</a>
-                <a href="https://www.linkedin.com/in/altan-tari-a15511201/" target="_blank" rel="noopener noreferrer" class="developer-name">Altan Tarı</a>
-                <a href="https://www.linkedin.com/in/%C3%B6mer-faruk-co%C5%9Fkun-191420234/" target="_blank" rel="noopener noreferrer" class="developer-name">Ömer Faruk Coşkun</a>
-                <a href="https://www.linkedin.com/in/hakan-tan-221368360" target="_blank" rel="noopener noreferrer" class="developer-name">Hakan Tan</a>
-            </div>
-            
-            <p class="copyright">© 2026 Yeni Yıl Hediyeleşme. Tüm hakları saklıdır.</p>
-        </div>
-    </footer>
+            <div id="login-form" class="form-container active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">E-posta</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="loginEmail" class="form-input" placeholder="ornek@ogr.iuc.edu.tr" required>
+                        </div>
+                    </div>
 
-    <!-- JavaScript -->
-    <script src="{% static 'js/countdown.js' %}"></script>
+                    <div class="form-group">
+                        <label class="form-label">Şifre</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#">Şifremi Unuttum?</a>
+                    </div>
+                    <button type="submit" class="submit-button" id="loginBtn">Giriş Yap 🎉</button>
+                </form>
+            </div>
+
+            <div id="signup-form" class="form-container">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label class="form-label">Ad Soyad</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="regName" class="form-input" placeholder="Ahmet Yılmaz" maxlength="50" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Okul E-postası</label> 
+                        <div class="input-wrapper">
+                            <input type="email" id="regEmail" class="form-input" placeholder="ogrenci@ogr.iuc.edu.tr" maxlength="50" required pattern=".+@ogr\.iuc\.edu\.tr" title="Sadece @ogr.iuc.edu.tr adresi">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Telefon</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="regPhone" class="form-input" placeholder="05XX XXX XX XX" maxlength="15" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Şifre</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="regPass" class="form-input" placeholder="••••••••" maxlength="50" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Şifre Tekrar</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="regPassConfirm" class="form-input" placeholder="••••••••" maxlength="50" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button" id="regBtn">Kayıt Ol & Doğrula ➡️</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="verify-card" class="verify-card">
+            <div class="verify-icon">📩</div>
+            <h2 class="auth-title" style="font-size: 24px;">Kodu Girin</h2>
+            <p class="auth-subtitle">
+                <span id="verify-email-display" style="color: var(--accent); font-weight: bold;"></span> adresine kodu gönderdik.
+            </p>
+
+            <div id="resend-msg" class="alert alert-success" style="display:none;">
+                ✅ Yeni kod gönderildi!
+            </div>
+
+            <div class="code-input-container">
+                <input type="text" id="verifyCode" class="big-code-input" placeholder="000000" maxlength="6">
+            </div>
+
+            <button onclick="handleVerify()" class="submit-button" id="verifyBtn">Doğrula ve Tamamla ✅</button>
+            
+            <button onclick="handleResend()" class="resend-link">🔄 Kodu Tekrar Gönder</button>
+            
+            <div class="back-home" style="margin-top: 15px;">
+                <a href="#" onclick="location.reload()">← Giriş Ekranına Dön</a>
+            </div>
+        </div>
+
+        <div class="back-home" id="main-back-link">
+            <a href="{% url 'home' %}">← Ana Sayfaya Dön</a>
+        </div>
+    </div>
+
+    <script>
+        // API URL Yapılandırması
+        const API = {
+            login: '/api/auth/login',
+            register: '/api/auth/send-verification',
+            verify: '/api/auth/verify-code',
+            resend: '/api/auth/resend-code'
+        };
+
+        let currentEmail = '';
+
+        // Mesaj Gösterme
+        function showMessage(msg, type='error') {
+            const el = document.getElementById('global-message');
+            el.style.display = 'flex';
+            el.textContent = msg;
+            
+            if(type === 'error') {
+                el.className = 'alert alert-error';
+                el.style.backgroundColor = '#ffe6e6';
+                el.style.color = '#cc0000';
+                el.style.borderColor = '#cc0000';
+            } else {
+                el.className = 'alert alert-success';
+                el.style.backgroundColor = '#e6ffe6';
+                el.style.color = '#006600';
+                el.style.borderColor = '#006600';
+            }
+
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+
+        // 1. KAYIT OLMA
+        async function handleRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById('regBtn');
+            btn.innerHTML = "İşleniyor...";
+            btn.disabled = true;
+
+            const data = {
+                full_name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                password: document.getElementById('regPass').value,
+                confirm_password: document.getElementById('regPassConfirm').value
+            };
+
+            try {
+                const res = await fetch(API.register, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    currentEmail = data.email;
+                    document.getElementById('verify-email-display').textContent = currentEmail;
+                    
+                    // DÜZELTME BURADA: display özelliğini doğrudan değiştiriyoruz
+                    document.getElementById('main-auth-flow').style.display = 'none';
+                    document.getElementById('main-back-link').style.display = 'none';
+                    
+                    const verifyCard = document.getElementById('verify-card');
+                    verifyCard.style.display = 'block'; // Inline style'ı ezmek için
+                    verifyCard.classList.add('active'); // Animasyon için
+                    
+                    document.getElementById('global-message').style.display = 'none';
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (err) {
+                showMessage("Sunucu hatası veya bağlantı sorunu.", 'error');
+                console.error(err);
+            } finally {
+                btn.innerHTML = "Kayıt Ol & Doğrula ➡️";
+                btn.disabled = false;
+            }
+        }
+
+        // 2. DOĞRULAMA
+        async function handleVerify() {
+            const code = document.getElementById('verifyCode').value;
+            const btn = document.getElementById('verifyBtn');
+            
+            if (code.length < 6) {
+                showMessage("Lütfen 6 haneli kodu eksiksiz girin.", 'error');
+                return;
+            }
+
+            btn.innerHTML = "Kontrol ediliyor...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(API.verify, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email: currentEmail, code: code })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    showMessage("Başarılı! Yönlendiriliyorsunuz...", 'success');
+                    window.location.href = "/tercihler/";
+                } else {
+                    showMessage(result.message, 'error');
+                    btn.innerHTML = "Doğrula ve Tamamla ✅";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showMessage("Hata oluştu.", 'error');
+                btn.disabled = false;
+            }
+        }
+
+        // 3. KODU TEKRAR GÖNDERME
+        async function handleResend() {
+            const msgBox = document.getElementById('resend-msg');
+            msgBox.style.display = 'none';
+
+            try {
+                const res = await fetch(API.resend, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email: currentEmail })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    msgBox.style.display = 'block';
+                    setTimeout(() => msgBox.style.display = 'none', 3000);
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (err) {
+                showMessage("Mail gönderilemedi.", 'error');
+            }
+        }
+
+        // 4. GİRİŞ YAPMA
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = "Giriş Yapılıyor...";
+            btn.disabled = true;
+
+            const data = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+
+            try {
+                const res = await fetch(API.login, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    window.location.href = "/tercihler/";
+                } else {
+                    showMessage(result.message, 'error');
+                    btn.innerHTML = "Giriş Yap 🎉";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showMessage("Bağlantı hatası.", 'error');
+                btn.disabled = false;
+            }
+        }
+
+        // Otomatik 6 hane girince gönder
+        const codeInput = document.getElementById('verifyCode');
+        if(codeInput) {
+            codeInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if(this.value.length === 6) {
+                    handleVerify();
+                }
+            });
+        }
+
+        // Tab Değiştirme
+        function switchTab(tab, event) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+            
+            document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + '-form').classList.add('active');
+            
+            document.getElementById('global-message').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
