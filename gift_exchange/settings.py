@@ -122,7 +122,7 @@ if os.environ.get("DATABASE_URL"):
         )
     }
 else:
-    # Local bilgisayarında SQLite kullan (Kurulum gerektirmez)
+    # Local bilgisayarında çalışırken burası çalışır (SQLite)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
