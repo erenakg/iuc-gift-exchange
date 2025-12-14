@@ -20,6 +20,8 @@ class StudentRegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         
+        if email:
+            email = email.lower()  # Maili alır almaz küçültüyoruz
         # E-posta uzunluk kontrolü
         if len(email) > 40:
             raise ValidationError("E-posta adresi maksimum 40 karakter olabilir.")

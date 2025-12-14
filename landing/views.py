@@ -257,39 +257,3 @@ def verify_email_view(request):
     """Eski doğrulama sayfası - Şimdi kullanılmıyor"""
     return redirect('auth_page')
 
-
-# DEBUG - MAİL TEST
-def debug_mail_view(request):
-    """Mail sistemini test et"""
-    user = getattr(settings, 'EMAIL_HOST_USER', 'Tanımlı Değil')
-    password_durumu = "Var (Gizli)" if getattr(settings, 'EMAIL_HOST_PASSWORD', None) else "YOK! (Env Kontrol Et)"
-    host = getattr(settings, 'EMAIL_HOST', 'Tanımlı Değil')
-    port = getattr(settings, 'EMAIL_PORT', 'Tanımlı Değil')
-    tls = getattr(settings, 'EMAIL_USE_TLS', 'Tanımlı Değil')
-    ssl = getattr(settings, 'EMAIL_USE_SSL', False)
-
-    info = f"""
-    <h1>Mail Debug Ekranı</h1>
-    <p><b>User:</b> {user}</p>
-    <p><b>Password Durumu:</b> {password_durumu}</p>
-    <p><b>Host:</b> {host}</p>
-    <p><b>Port:</b> {port}</p>
-    <p><b>TLS:</b> {tls}</p>
-    <p><b>SSL:</b> {ssl}</p>
-    <hr>
-    <h3>Gönderim Sonucu:</h3>
-    """
-    
-    try:
-        send_mail(
-            subject='Test Başlığı - Render',
-            message='Bu test mesajıdır.',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=['omerfarukcoskun@ogr.iuc.edu.tr'],
-            fail_silently=False,
-        )
-        result = "<h2 style='color:green'>✅ BAŞARILI! Mail gitti.</h2>"
-    except Exception as e:
-        result = f"<h2 style='color:red'>❌ HATA: {e}</h2>"
-
-    return HttpResponse(info + result)
