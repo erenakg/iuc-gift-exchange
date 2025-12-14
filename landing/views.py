@@ -134,7 +134,7 @@ def api_verify_code(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            email = data.get('email')
+            email = data.get('email', '').strip().lower()
             code = data.get('code')
 
             # Kullanılmamış ve en yeni kodu bul
@@ -176,7 +176,7 @@ def api_resend_code(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            email = data.get('email')
+            email = data.get('email', '').strip().lower()
 
             user = User.objects.filter(email=email).first()
             if not user:
@@ -224,7 +224,7 @@ def api_login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            email = data.get('email')
+            email = data.get('email', '').strip().lower()
             password = data.get('password')
 
             user_obj = User.objects.filter(email=email).first()
