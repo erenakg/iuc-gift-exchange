@@ -27,7 +27,7 @@ class StudentRegistrationForm(forms.ModelForm):
             raise ValidationError("E-posta adresi maksimum 40 karakter olabilir.")
         
         # E-posta zaten var mı kontrolü
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email__iexact = email).exists():
             raise ValidationError("Bu e-posta adresi zaten kayıtlı.")
 
         # Okul e-postası kontrolü
