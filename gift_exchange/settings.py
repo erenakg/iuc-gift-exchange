@@ -52,7 +52,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 INSTALLED_APPS = [
-    'django_ratelimit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,7 +61,7 @@ INSTALLED_APPS = [
     'anymail',  
     'landing', 
 ]
-SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

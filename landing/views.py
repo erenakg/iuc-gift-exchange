@@ -1,51 +1,49 @@
 import json
-import logging
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt 
 from .forms import StudentRegistrationForm
 from .models import EmailVerification, Profile, UserPreference
+from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
-
-# GÜVENLİK KÜTÜPHANESİ
-# Eğer altı kırmızıysa terminale: pip install django-ratelimit yaz!
-from django_ratelimit.decorators import ratelimit
+import random
+import logging
 
 logger = logging.getLogger(__name__)
 
-# --- YARDIMCI FONKSİYONLAR ---
+# ---------------------------------------------------------
+# YARDIMCI FONKSİYONLAR
+# ---------------------------------------------------------
 def get_client_ip(request):
-    """İstemci IP adresini güvenli şekilde al"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0].strip()
+        ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-# --- SAYFA VIEW'LARI ---
+# ---------------------------------------------------------
+# SAYFA VIEW'LARI (HTML Döner)
+# ---------------------------------------------------------
 
 def home_view(request):
-    """Ana Sayfa"""
-    # Sadece aktif kullanıcıları say
-    kullanici_sayisi = User.objects.filter(is_active=True).count()
+    kullanici_sayisi = User.objects.count()
     return render(request, 'landing/home.html', {'total_users': kullanici_sayisi})
 
 def auth_page_view(request):
-    """Giriş ve Kayıt Sayfası"""
+    """Sadece HTML sayfasını ekrana basar, mantık API'de döner"""
     if request.user.is_authenticated:
         return redirect('preferences')
     return render(request, 'landing/auth.html')
 
 @login_required(login_url='auth_page')
 def preferences_view(request):
-    """Tercihler Sayfası"""
     if request.method == 'POST':
         hobbies_string = request.POST.get('preferences') 
         notes = request.POST.get('additional_notes')
@@ -61,180 +59,201 @@ def preferences_view(request):
         
     return render(request, 'landing/preferences.html')
 
-# --- API VIEW'LARI (GÜVENLİK KORUMALI) ---
+# ---------------------------------------------------------
+# API VIEW'LARI (JavaScript ile konuşur - JSON Döner)
+# ---------------------------------------------------------
 
-@csrf_exempt
-@ratelimit(key='ip', rate='5/h', block=False)
+@csrf_exempt 
 def api_register(request):
-    """Kayıt API"""
-    # Rate Limit Kontrolü
-    if getattr(request, 'limited', False):
-        return JsonResponse({'success': False, 'message': 'Çok fazla deneme. 1 saat bekleyin.'}, status=429)
-
+    
+    """Kayıt olma ve Kod Gönderme"""
+    # --- DEBUG AJANI BAŞLANGIÇ ---
+    print(f"🛑 GELEN İSTEK: {request.path}")
+    print(f"🛑 METHOD TÜRÜ: {request.method}")
+    print(f"🛑 BODY VERİSİ: {request.body}")
+    # --- DEBUG AJANI BİTİŞ ---
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            
+            # Form validasyonunu manuel çağırıyoruz 
             form = StudentRegistrationForm(data)
             
             if form.is_valid():
-                email = form.cleaned_data.get('email')
-                
-                # Zaten aktif bir kullanıcı var mı?
-                if User.objects.filter(email=email, is_active=True).exists():
-                    return JsonResponse({'success': False, 'message': 'Bu e-posta zaten kayıtlı.'}, status=400)
-
-                # Yarım kalan (onaysız) eski kayıtları temizle
-                User.objects.filter(email=email, is_active=False).delete()
-
-                # Yeni kullanıcı oluştur (Pasif)
+                # 1. Kullanıcıyı oluştur (Pasif)
                 user = form.save(commit=False)
                 user.is_active = False
                 user.save()
 
-                # Profil oluştur
+                # Profil oluştur ve telefonu kaydet
                 phone = form.cleaned_data.get('phone', '')
-                profile, _ = Profile.objects.get_or_create(user=user)
+                profile, created = Profile.objects.get_or_create(user=user)
                 profile.phone = phone
                 profile.save()
 
-                # Doğrulama kodu üret ve kaydet
+                # 2. Kod üret ve kaydet
                 code = EmailVerification.generate_code()
-                EmailVerification.objects.create(user=user, code=code, ip_address=get_client_ip(request))
+                EmailVerification.objects.create(
+                    user=user,
+                    code=code,
+                    ip_address=get_client_ip(request)
+                )
 
-                # Mail gönder
-                subject = 'İÜC Hediyeleşme - Kodunuz'
-                message = f'Merhaba,\n\nDoğrulama kodun: {code}\n\nBu kod 10 dakika geçerlidir.'
+                # 3. Mail gönder
+                subject = 'İÜC Hediyeleşme - Doğrulama Kodunuz'
+                message = f'Merhaba {user.first_name},\n\nHesabını doğrulamak için kodun:\n\n{code}\n\nBu kod 10 dakika geçerlidir.'
                 
                 try:
-                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
+                    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+                    print(f"✅ Mail gönderildi: {user.email} → Kod: {code}")
                     return JsonResponse({'success': True, 'message': 'Kod gönderildi'})
                 except Exception as e:
-                    user.delete() # Mail gitmezse kullanıcıyı sil
-                    logger.error(f'Mail Hatası: {e}')
-                    return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. E-postanı kontrol et.'}, status=500)
-            else:
-                # Form hatasını döndür
-                return JsonResponse({'success': False, 'message': next(iter(form.errors.values()))[0]}, status=400)
-        except:
-            return JsonResponse({'success': False, 'message': 'Sunucu hatası oluştu.'}, status=500)
+                    import traceback
+                    logger.error('Kayıt Hatası: %s', e, exc_info=True)
+                    print('❌ Kayıt Hatası:', e)
+                    traceback.print_exc()
+                    return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. Lütfen tekrar deneyin.'}, status=500)
             
+            else:
+                # Form hatalarını topla (İlk hatayı döndür)
+                error_msg = next(iter(form.errors.values()))[0]
+                return JsonResponse({'success': False, 'message': error_msg}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Geçersiz veri formatı'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Sunucu hatası: {str(e)}'}, status=500)
+
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-@csrf_exempt
-@ratelimit(key='ip', rate='10/m', block=False)
-def api_verify_code(request):
-    """Doğrulama API"""
-    if getattr(request, 'limited', False):
-        return JsonResponse({'success': False, 'message': 'Çok fazla deneme. Biraz bekleyin.'}, status=429)
 
+@csrf_exempt
+def api_verify_code(request):
+    """Doğrulama Kodu Kontrolü"""
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             email = data.get('email', '').strip().lower()
             code = data.get('code')
-            
-            # En son gönderilen kodu bul
-            verification = EmailVerification.objects.filter(user__email=email, is_used=False).order_by('-created_at').first()
 
-            if verification and verification.code == str(code):
-                if verification.is_expired():
-                    return JsonResponse({'success': False, 'message': 'Kodun süresi dolmuş.'}, status=400)
-                
-                # Başarılı doğrulama
-                user = verification.user
-                user.is_active = True
-                user.save()
-                
-                verification.is_used = True
-                verification.save()
-                
-                login(request, user)
-                return JsonResponse({'success': True, 'message': 'Başarılı! Yönlendiriliyorsunuz...'})
-            
-            return JsonResponse({'success': False, 'message': 'Hatalı kod.'}, status=400)
-        except:
-            return JsonResponse({'success': False, 'message': 'Hata oluştu.'}, status=500)
-            
+            # Kullanılmamış ve en yeni kodu bul
+            verification = EmailVerification.objects.filter(
+                user__email=email, 
+                is_used=False
+            ).order_by('-created_at').first()
+
+            if verification:
+                if verification.code == str(code):
+                    if verification.is_expired():
+                        return JsonResponse({'success': False, 'message': 'Kodun süresi dolmuş.'}, status=400)
+                    
+                    # BAŞARILI
+                    user = verification.user
+                    user.is_active = True
+                    user.save()
+                    
+                    verification.is_used = True
+                    verification.save()
+                    
+                    login(request, user) # Oturum aç
+                    
+                    return JsonResponse({'success': True, 'message': 'Doğrulama başarılı!', 'token': 'session_active'})
+                else:
+                    return JsonResponse({'success': False, 'message': 'Hatalı kod!'}, status=400)
+            else:
+                return JsonResponse({'success': False, 'message': 'Doğrulama kaydı bulunamadı.'}, status=404)
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-@csrf_exempt
-@ratelimit(key='ip', rate='3/10m', block=False)
-def api_resend_code(request):
-    """Yeniden Gönderme API - (DÜZELTİLDİ: Artık çalışıyor)"""
-    if getattr(request, 'limited', False):
-        return JsonResponse({'success': False, 'message': 'Çok sık kod istiyorsunuz. Lütfen bekleyin.'}, status=429)
 
+@csrf_exempt
+def api_resend_code(request):
+    """Doğrulama Kodunu Tekrar Gönder"""
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             email = data.get('email', '').strip().lower()
-            
+
             user = User.objects.filter(email=email).first()
             if not user:
                 return JsonResponse({'success': False, 'message': 'Kullanıcı bulunamadı.'}, status=404)
-            
-            if user.is_active:
-                return JsonResponse({'success': False, 'message': 'Hesap zaten onaylı. Giriş yapın.'}, status=400)
 
-            # Son 1 dakika içinde kod gönderilmiş mi?
+            if user.is_active:
+                return JsonResponse({'success': False, 'message': 'Bu hesap zaten doğrulanmış.'}, status=400)
+
+            # Rate limiting
             recent = EmailVerification.objects.filter(
                 user=user,
                 created_at__gte=timezone.now() - timedelta(minutes=1)
             ).first()
             
             if recent:
-                return JsonResponse({'success': False, 'message': 'Yeni kod için 1 dakika beklemelisiniz.'}, status=429)
+                return JsonResponse({'success': False, 'message': 'Lütfen 1 dakika bekleyin!'}, status=429)
 
-            # Yeni kod üret ve gönder
             code = EmailVerification.generate_code()
             EmailVerification.objects.create(
-                user=user, 
-                code=code, 
+                user=user,
+                code=code,
                 ip_address=get_client_ip(request)
             )
-            
-            subject = 'İÜC Hediyeleşme - Yeni Kod'
-            message = f'Yeni doğrulama kodun: {code}'
+
+            subject = 'İÜC Hediyeleşme - Yeni Doğrulama Kodunuz'
+            message = f'Merhaba {user.first_name},\n\n Yeni kodunuz:\n\n{code}\n\n10 dakika geçerlidir.'
             
             try:
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
-                return JsonResponse({'success': True, 'message': 'Yeni kod gönderildi.'})
-            except:
-                return JsonResponse({'success': False, 'message': 'Mail gönderilemedi.'}, status=500)
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+                print(f"✅ Yeni kod gönderildi: {code}")
+                return JsonResponse({'success': True, 'message': 'Yeni kod gönderildi!'})
+            except Exception as e:
+                logger.error('Resend mail hatası: %s', e, exc_info=True)
+                return JsonResponse({'success': False, 'message': 'Mail gönderilemedi. Lütfen tekrar deneyin.'}, status=500)
 
         except Exception as e:
-            return JsonResponse({'success': False, 'message': f'Hata: {str(e)}'}, status=500)
-
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+            
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-@csrf_exempt
-@ratelimit(key='ip', rate='5/m', block=False)
-def api_login(request):
-    """Giriş API"""
-    if getattr(request, 'limited', False):
-        return JsonResponse({'success': False, 'message': 'Çok fazla hatalı giriş. Lütfen bekleyin.'}, status=429)
 
+@csrf_exempt
+def api_login(request):
+    """Giriş Yapma API"""
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            user = authenticate(request, username=data.get('email'), password=data.get('password'))
-            
-            if user:
-                if not user.is_active: 
-                    return JsonResponse({'success': False, 'message': 'Hesabınız onaylanmamış.'}, status=401)
-                
-                login(request, user)
-                return JsonResponse({'success': True, 'message': 'Giriş başarılı'})
-            
-            return JsonResponse({'success': False, 'message': 'E-posta veya şifre hatalı.'}, status=401)
-        except:
-            return JsonResponse({'success': False, 'message': 'Giriş işlemi sırasında hata oluştu.'}, status=500)
-            
+            email = data.get('email', '').strip().lower()
+            password = data.get('password')
+
+            user_obj = User.objects.filter(email=email).first()
+
+            if user_obj:
+                user = authenticate(request, username=user_obj.username, password=password)
+                if user:
+                    if not user.is_active:
+                         return JsonResponse({'success': False, 'message': 'Hesabınız doğrulanmamış.'}, status=401)
+                    
+                    login(request, user)
+                    return JsonResponse({'success': True, 'message': 'Giriş başarılı'})
+                else:
+                    return JsonResponse({'success': False, 'message': 'Şifre hatalı'}, status=401)
+            else:
+                return JsonResponse({'success': False, 'message': 'Kullanıcı bulunamadı'}, status=404)
+
+        except Exception as e:
+             return JsonResponse({'success': False, 'message': 'Bir hata oluştu'}, status=500)
+
     return JsonResponse({'message': 'Method not allowed'}, status=405)
 
-# --- BOŞ YÖNLENDİRMELER (Hata Önleyici) ---
+# YENİ VE TEMİZ HALİ
 def register_view(request):
-    return redirect('auth_page')
+    """Sadece kayıt sayfasını açar, işlemi JavaScript yapar"""
+    return render(request, 'landing/auth.html')
+
 
 def verify_email_view(request):
+    """Eski doğrulama sayfası - Şimdi kullanılmıyor"""
     return redirect('auth_page')
+
